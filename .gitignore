@@ -1,5 +1,6 @@
 /target
 /sample-data
+/script/output
 .DS_Store
 *.class
 *.log
