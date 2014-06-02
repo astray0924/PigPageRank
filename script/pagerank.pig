@@ -4,8 +4,8 @@ REGISTER libs/myudfs.jar;
 
 page = load '../sample-data/enwiki-20121101-pages-articles01.xml-by-line.bz2' as (html: chararray);
 
-parse = FOREACH page GENERATE myudfs.ExtractPageInfo(html) as (info:tuple(id:int,title:chararray,outlinks:chararray,outlinks_count:int));
+parse = FOREACH page GENERATE myudfs.ExtractPageInfo(html) as (info: tuple(id: int,title: chararray,outlinks: chararray,outlinks_count: int));
 
-page_info = FOREACH parse GENERATE info.id, info.title, info.outlinks, info.outlinks_count;
+page_info = FILTER parse BY (info.title is not null and info.outlinks_count != 0);
 
 dump page_info;
