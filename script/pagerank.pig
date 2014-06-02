@@ -14,17 +14,25 @@ title_id = foreach page_info generate info.title, info.id;
 --store id_title into 'output/id_title.gz';
 --store title_id into 'output/title_id.gz';
 
+-- The number of pages
+page_ids = group id_title all;
+page_count = foreach page_ids generate COUNT(id_title) as count;
+describe page_count;
+
 -- InDegree & OutDegree
 plt = foreach page_info generate info.id, flatten(TOKENIZE(info.outlinks, '|')) as outlink;
 pli_temp = join plt by outlink, title_id by title using 'replicated';
 pli = foreach pli_temp generate plt::id as page_id, title_id::id as link_id;
 
 outdegree_temp = group pli by page_id;
-outdegree = foreach outdegree_temp generate group as page_id, COUNT(pli.link_id) as outcount;
-indegree_temp = group pli by link_id;
-indegree = foreach indegree_temp generate group as page_id, pli.page_id as inlink_ids;
+outdegree = foreach outdegree_temp generate group as page_id: int, COUNT(pli.link_id) as outcount: int;
 
-dump outdegree;
+indegree_temp = group pli by link_id;
+indegree = foreach indegree_temp generate group as page_id: int, pli.page_id as inlink_ids;
 
 -- Build Graph
--- outdegree_count = foreach 
+node_temp = join outdegree by page_id, indegree by page_id;
+node = foreach node_temp generate outdegree::page_id as page_id, outcount, inlink_ids, ((float) 1 / page_count.count) as score: float;
+
+dump node;
+
