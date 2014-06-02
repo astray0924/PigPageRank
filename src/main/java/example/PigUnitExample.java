@@ -1,4 +1,4 @@
-package ac.kr.kaist.kyoungrok.PigPractice;
+package example;
 
 import java.io.IOException;
 
