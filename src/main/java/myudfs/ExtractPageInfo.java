@@ -1,4 +1,4 @@
-package pigpagerank;
+package myudfs;
 
 import java.io.IOException;
 import java.util.Arrays;
