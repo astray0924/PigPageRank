@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.apache.pig.EvalFunc;
+import org.apache.pig.data.DataType;
 import org.apache.pig.data.Tuple;
 import org.apache.pig.data.TupleFactory;
+import org.apache.pig.impl.logicalLayer.schema.Schema;
+import org.apache.pig.impl.logicalLayer.schema.Schema.FieldSchema;
 
 public class ExtractPageInfo extends EvalFunc<Tuple> {
 
@@ -18,5 +21,19 @@ public class ExtractPageInfo extends EvalFunc<Tuple> {
 					Arrays.asList((String) input.get(0)));
 		}
 
+	}
+
+	@Override
+	public Schema outputSchema(Schema input) {
+		try {
+			Schema tupleSchema = new Schema();
+			tupleSchema.add(input.getField(0));
+			FieldSchema fieldSchema = new FieldSchema(getSchemaName(getClass()
+					.getName().toLowerCase(), input), tupleSchema,
+					DataType.TUPLE);
+			 return new Schema(fieldSchema);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }
