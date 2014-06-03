@@ -11,7 +11,7 @@ page_info = FILTER parse BY (info.title is not null and info.outlinks_count != 0
 -- id-title, title-id map
 id_title = foreach page_info generate info.id, info.title;
 title_id = foreach page_info generate info.title, info.id;
--- store id_title into 'output/id_title';
+store id_title into 'output/id_title';
 -- store title_id into 'output/title_id';
 
 -- The number of pages
