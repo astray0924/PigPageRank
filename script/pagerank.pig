@@ -32,7 +32,8 @@ indegree = foreach indegree_temp generate group as page_id: int, pli.page_id as 
 
 -- Build Graph
 node_temp = join outdegree by page_id, indegree by page_id;
-node = foreach node_temp generate outdegree::page_id as page_id, outcount, inlink_ids, ((float) 1 / page_count.count) as score: float;
+node = foreach node_temp generate outdegree::page_id as page_id, outcount as outcount, inlink_ids as inlink_ids, ((float) 1 / page_count.count) as score: float;
+graph = foreach node generate TOMAP((chararray)page_id, (outcount, inlink_ids, score));
 
-dump node;
+dump graph;
 
