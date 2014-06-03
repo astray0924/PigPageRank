@@ -2,6 +2,8 @@
 /sample-data
 /xml-wiki
 /script/output
+/script/data
+
 .DS_Store
 *.class
 *.log

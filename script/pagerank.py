@@ -1,45 +1,24 @@
+#!/Users/kyoungrok/Library/Enthought/Canopy_64bit/User/bin/python
+
 from org.apache.pig.scripting import *
+Pig.registerJar('libs/jython.jar')
 
 P = Pig.compile("""
--- PR(A) = (1-d) + d (PR(T1)/C(T1) + ... + PR(Tn)/C(Tn))
-
-previous_pagerank = load '$docs_in' as (url:chararray, pagerank:float,
-                      links:{link:(url:chararray)});
-outbound_pagerank = foreach previous_pagerank generate
-                      pagerank / COUNT(links) as pagerank,
-                      flatten(links) as to_url;
-cogrpd            = cogroup outbound_pagerank by to_url,
-                      previous_pagerank by url;
-new_pagerank      = foreach cogrpd generate group as url,
-                      (1 - $d) + $d * SUM (outbound_pagerank.pagerank)
-                      as pagerank,
-                      flatten(previous_pagerank.links) as links,
-                      flatten(previous_pagerank.pagerank) AS previous_pagerank;
-store new_pagerank into '$docs_out';
-nonulls           = filter new_pagerank by previous_pagerank is not null and
-                        pagerank is not null;
-pagerank_diff     = foreach nonulls generate ABS (previous_pagerank - pagerank);
-grpall            = group pagerank_diff all;
-max_diff          = foreach grpall generate MAX (pagerank_diff);
-store max_diff into '$max_diff';
+  previous_pagerank = load '$docs_in' as (page_id:int, outlinks_count:int, inlinks:{link:(link_id:int)}, pagerank:float);
+  store previous_pagerank into '$docs_out';
 """)
 
-params = { 'd': '0.5', 'docs_in': 'webcrawl' }
+params = { 'd': '0.85', 'docs_in': 'graph' }
+K = 5
 
-for i in range(10):
-    out = "out/pagerank_data_" + str(i + 1)
-    max_diff = "out/max_diff_" + str(i + 1)
+for i in range(K):
+    out = "output/pagerank_" + str(i + 1)
     params["docs_out"] = out
-    params["max_diff"] = max_diff
     Pig.fs("rmr " + out)
-    Pig.fs("rmr " + max_diff)
     bound = P.bind(params)
     stats = bound.runSingle()
+
     if not stats.isSuccessful():
         raise 'failed'
-    mdv = float(str(stats.result("max_diff").iterator().next().get(0)))
-    print "max_diff_value = " + str(mdv)
-    if mdv < 0.01:
-        print "done at iteration " + str(i)
-        break
+    
     params["docs_in"] = out
