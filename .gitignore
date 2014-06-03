@@ -1,5 +1,6 @@
 /target
 /sample-data
+/xml-wiki
 /script/output
 .DS_Store
 *.class

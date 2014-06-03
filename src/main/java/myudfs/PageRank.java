@@ -10,19 +10,15 @@ import org.apache.pig.data.Tuple;
 
 public class PageRank extends EvalFunc<Map<String, Tuple>> {
 	private static final float jumpingFactor = 0.85f;
-	private int iteration;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Tuple> exec(Tuple input) throws IOException {
 		Map<String, Tuple> graph = (Map<String, Tuple>) input.get(0);
-		this.iteration = (Integer) input.get(1);
 
-		for (int i = 0; i < iteration; i++) {
-			for (Tuple node : graph.values()) {
-				float newScore = getNewScore(node, graph);
-				node.set(2, newScore);
-			}
+		for (Tuple node : graph.values()) {
+			float newScore = getNewScore(node, graph);
+			node.set(2, newScore);
 		}
 
 		return graph;
