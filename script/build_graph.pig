@@ -11,8 +11,8 @@ page_info = FILTER parse BY (info.title is not null and info.outlinks_count != 0
 -- id-title, title-id map
 id_title = foreach page_info generate info.id, info.title;
 title_id = foreach page_info generate info.title, info.id;
-store id_title into 'output/id_title';
-store title_id into 'output/title_id';
+-- store id_title into 'output/id_title';
+-- store title_id into 'output/title_id';
 
 -- The number of pages
 page_ids = group id_title all;
@@ -25,15 +25,14 @@ pli = foreach pli_temp generate plt::id as page_id, title_id::id as link_id;
 pli_distinct = DISTINCT pli;
 
 outdegree_temp = group pli_distinct by page_id;
-outdegree = foreach outdegree_temp generate group as page_id: int, COUNT(pli_distinct.link_id) as outcount: int;
+outdegree = foreach outdegree_temp generate group as page_id:int, pli_distinct.link_id as links;
+--store outdegree into 'output/outdegree';
 
 indegree_temp = group pli_distinct by link_id;
-indegree = foreach indegree_temp generate group as page_id: int, pli_distinct.page_id as inlink_ids;
+indegree = foreach indegree_temp generate group as page_id: int, pli_distinct.page_id as links;
+--store indegree into 'output/indegree';
 
 -- Build Graph
 node_temp = join outdegree by page_id, indegree by page_id;
-graph = foreach node_temp generate outdegree::page_id as page_id, outcount as outcount, inlink_ids as inlink_ids, ((float) 1 / page_count.count) as score: float;
---graph = foreach node generate TOMAP((chararray)page_id, (outcount, inlink_ids, score));
+graph = foreach node_temp generate outdegree::page_id as page_id, outdegree::links as links, ((float) 1 / page_count.count) as score:float;
 store graph into 'output/graph';
-
--- Perform PageRank
