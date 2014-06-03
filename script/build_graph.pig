@@ -2,7 +2,7 @@
 register libs/jsoup-1.7.3.jar;
 register libs/myudfs.jar;
 
-page = load '../sample-data/' as html:chararray;
+page = load '../xml-wiki/' as html:chararray;
 
 -- Parsing
 parse = FOREACH page GENERATE myudfs.ExtractPageInfo(html) as (info:tuple(id:int,title:chararray,outlinks:chararray,outlinks_count:int));
