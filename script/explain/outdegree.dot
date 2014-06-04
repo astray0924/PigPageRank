@@ -1,0 +1,615 @@
+#-----------------------------------------------
+# New Logical Plan:
+#-----------------------------------------------
+digraph plan {
+compound=true;
+node [shape=rect];
+s1433442380_in [label="", style=invis, height=0, width=0];
+s1433442380_out [label="", style=invis, height=0, width=0];
+subgraph cluster_1433442380 {
+label="LOForEach"labelloc=b;
+1162212835 [label="LOInnerLoad"];
+1947348380 [label="LOInnerLoad"];
+s1231674724_in [label="", style=invis, height=0, width=0];
+s1231674724_out [label="", style=invis, height=0, width=0];
+subgraph cluster_1231674724 {
+label="LOGenerate"labelloc=b;
+733491272 [label="Project0:(*)"];
+s1231674724_in -> 733491272 [style=invis];
+1440218161 [label="Project1:(*)"];
+1458446590 [label="Dereference"];
+1440218161 -> 1458446590
+s1231674724_in -> 1440218161 [style=invis];
+};
+733491272 -> s1231674724_out [style=invis];
+1458446590 -> s1231674724_out [style=invis];
+1162212835 -> s1231674724_in [lhead=cluster_1231674724]
+1947348380 -> s1231674724_in [lhead=cluster_1231674724]
+s1433442380_in -> 1162212835 [style=invis];
+s1433442380_in -> 1947348380 [style=invis];
+};
+s1231674724_out -> s1433442380_out [style=invis];
+s1653894434_out [label="", style=invis, height=0, width=0];
+subgraph cluster_1653894434 {
+label="LOCogroup"labelloc=b;
+subgraph cluster_1653894434_312759349 {
+label="";
+s1653894434_312759349_in [label="", style=invis, height=0, width=0];
+2122909117 [label="Project0:0"];
+s1653894434_312759349_in -> 2122909117 [style=invis];
+};
+};
+2122909117 -> s1653894434_out [style=invis];
+312759349 [label="LODistinct"];
+s61025956_in [label="", style=invis, height=0, width=0];
+s61025956_out [label="", style=invis, height=0, width=0];
+subgraph cluster_61025956 {
+label="LOForEach"labelloc=b;
+1677395212 [label="LOInnerLoad"];
+1963493915 [label="LOInnerLoad"];
+s439767277_in [label="", style=invis, height=0, width=0];
+s439767277_out [label="", style=invis, height=0, width=0];
+subgraph cluster_439767277 {
+label="LOGenerate"labelloc=b;
+1309289016 [label="Project0:(*)"];
+s439767277_in -> 1309289016 [style=invis];
+2103044750 [label="Project1:(*)"];
+s439767277_in -> 2103044750 [style=invis];
+};
+1309289016 -> s439767277_out [style=invis];
+2103044750 -> s439767277_out [style=invis];
+1677395212 -> s439767277_in [lhead=cluster_439767277]
+1963493915 -> s439767277_in [lhead=cluster_439767277]
+s61025956_in -> 1677395212 [style=invis];
+s61025956_in -> 1963493915 [style=invis];
+};
+s439767277_out -> s61025956_out [style=invis];
+s1690127932_out [label="", style=invis, height=0, width=0];
+subgraph cluster_1690127932 {
+label="LOJoin(REPLICATED)"labelloc=b;
+subgraph cluster_1690127932_1647958666 {
+label="";
+s1690127932_1647958666_in [label="", style=invis, height=0, width=0];
+1213954255 [label="Project0:1"];
+s1690127932_1647958666_in -> 1213954255 [style=invis];
+};
+subgraph cluster_1690127932_1455093129 {
+label="";
+s1690127932_1455093129_in [label="", style=invis, height=0, width=0];
+1834517285 [label="Project1:0"];
+s1690127932_1455093129_in -> 1834517285 [style=invis];
+};
+};
+1213954255 -> s1690127932_out [style=invis];
+1834517285 -> s1690127932_out [style=invis];
+s1647958666_in [label="", style=invis, height=0, width=0];
+s1647958666_out [label="", style=invis, height=0, width=0];
+subgraph cluster_1647958666 {
+label="LOForEach"labelloc=b;
+544589709 [label="LOInnerLoad"];
+343935649 [label="LOInnerLoad"];
+s1887369878_in [label="", style=invis, height=0, width=0];
+s1887369878_out [label="", style=invis, height=0, width=0];
+subgraph cluster_1887369878 {
+label="LOGenerate"labelloc=b;
+1821889520 [label="Project0:(*)"];
+1675323714 [label="Dereference"];
+1821889520 -> 1675323714
+s1887369878_in -> 1821889520 [style=invis];
+1507565381 [label="Project1:(*)"];
+1639291161 [label="Dereference"];
+946144838 [label="Constant"];
+1498835564 [label="UserFunc"];
+1507565381 -> 1639291161
+1639291161 -> 1498835564
+946144838 -> 1498835564
+s1887369878_in -> 1507565381 [style=invis];
+s1887369878_in -> 946144838 [style=invis];
+};
+1675323714 -> s1887369878_out [style=invis];
+1498835564 -> s1887369878_out [style=invis];
+544589709 -> s1887369878_in [lhead=cluster_1887369878]
+343935649 -> s1887369878_in [lhead=cluster_1887369878]
+s1647958666_in -> 544589709 [style=invis];
+s1647958666_in -> 343935649 [style=invis];
+};
+s1887369878_out -> s1647958666_out [style=invis];
+s1455093129_in [label="", style=invis, height=0, width=0];
+s1455093129_out [label="", style=invis, height=0, width=0];
+subgraph cluster_1455093129 {
+label="LOForEach"labelloc=b;
+91446054 [label="LOInnerLoad"];
+1483021973 [label="LOInnerLoad"];
+s2078619350_in [label="", style=invis, height=0, width=0];
+s2078619350_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2078619350 {
+label="LOGenerate"labelloc=b;
+219960763 [label="Project0:(*)"];
+1061187254 [label="Dereference"];
+219960763 -> 1061187254
+s2078619350_in -> 219960763 [style=invis];
+522489643 [label="Project1:(*)"];
+422797318 [label="Dereference"];
+522489643 -> 422797318
+s2078619350_in -> 522489643 [style=invis];
+};
+1061187254 -> s2078619350_out [style=invis];
+422797318 -> s2078619350_out [style=invis];
+91446054 -> s2078619350_in [lhead=cluster_2078619350]
+1483021973 -> s2078619350_in [lhead=cluster_2078619350]
+s1455093129_in -> 91446054 [style=invis];
+s1455093129_in -> 1483021973 [style=invis];
+};
+s2078619350_out -> s1455093129_out [style=invis];
+s426164500_in [label="", style=invis, height=0, width=0];
+s426164500_out [label="", style=invis, height=0, width=0];
+subgraph cluster_426164500 {
+label="LOFilter"labelloc=b;
+1443443454 [label="Not"];
+1625488363 [label="IsNull"];
+362078102 [label="Dereference"];
+1307524379 [label="Project0:0"];
+279133410 [label="NotEqual"];
+534491773 [label="Dereference"];
+1978854866 [label="Project0:0"];
+1290936822 [label="Constant"];
+274040284 [label="And"];
+1625488363 -> 1443443454
+362078102 -> 1625488363
+1307524379 -> 362078102
+534491773 -> 279133410
+1290936822 -> 279133410
+1978854866 -> 534491773
+1443443454 -> 274040284
+279133410 -> 274040284
+s426164500_in -> 1307524379 [style=invis];
+s426164500_in -> 1978854866 [style=invis];
+s426164500_in -> 1290936822 [style=invis];
+};
+274040284 -> s426164500_out [style=invis];
+164967086 [label="LOLoad", style="filled", fillcolor="gray"];
+833041663 [label="LOStore", style="filled", fillcolor="gray"];
+698114403 [label="LOSplit"];
+s1505607660_in [label="", style=invis, height=0, width=0];
+s1505607660_out [label="", style=invis, height=0, width=0];
+subgraph cluster_1505607660 {
+label="LOSplitOutput"labelloc=b;
+875761593 [label="Constant"];
+s1505607660_in -> 875761593 [style=invis];
+};
+875761593 -> s1505607660_out [style=invis];
+s948129019_in [label="", style=invis, height=0, width=0];
+s948129019_out [label="", style=invis, height=0, width=0];
+subgraph cluster_948129019 {
+label="LOSplitOutput"labelloc=b;
+72177013 [label="Constant"];
+s948129019_in -> 72177013 [style=invis];
+};
+72177013 -> s948129019_out [style=invis];
+s248575390_in [label="", style=invis, height=0, width=0];
+s248575390_out [label="", style=invis, height=0, width=0];
+subgraph cluster_248575390 {
+label="LOForEach"labelloc=b;
+s1409622974_in [label="", style=invis, height=0, width=0];
+s1409622974_out [label="", style=invis, height=0, width=0];
+subgraph cluster_1409622974 {
+label="LOGenerate"labelloc=b;
+2121904503 [label="UserFunc"];
+1735539839 [label="Project0:(*)"];
+2095180519 [label="Cast"];
+2095180519 -> 2121904503
+1735539839 -> 2095180519
+s1409622974_in -> 1735539839 [style=invis];
+};
+2121904503 -> s1409622974_out [style=invis];
+493730314 [label="LOInnerLoad"];
+493730314 -> s1409622974_in [lhead=cluster_1409622974]
+s248575390_in -> 493730314 [style=invis];
+};
+s1409622974_out -> s248575390_out [style=invis];
+s1433442380_out -> 833041663
+s1653894434_out -> s1433442380_in [lhead=cluster_1433442380]
+312759349 -> s1653894434_312759349_in [lhead=cluster_1653894434_312759349]
+s61025956_out -> 312759349
+s1690127932_out -> s61025956_in [lhead=cluster_61025956]
+s1647958666_out -> s1690127932_1647958666_in [lhead=cluster_1690127932_1647958666]
+s1455093129_out -> s1690127932_1455093129_in [lhead=cluster_1690127932_1455093129]
+s426164500_out -> 698114403
+164967086 -> s248575390_in [lhead=cluster_248575390]
+698114403 -> s1505607660_in [lhead=cluster_1505607660]
+698114403 -> s948129019_in [lhead=cluster_948129019]
+s1505607660_out -> s1647958666_in [lhead=cluster_1647958666]
+s948129019_out -> s1455093129_in [lhead=cluster_1455093129]
+s248575390_out -> s426164500_in [lhead=cluster_426164500]
+}
+#-----------------------------------------------
+# Physical Plan:
+#-----------------------------------------------
+digraph plan {
+compound=true;
+node [shape=rect];
+2070488864 [label="page: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/xml-wiki,\norg.apache.pig.builtin.PigStorage)", style="filled", fillcolor="gray"];
+s2070488891_in [label="", style=invis, height=0, width=0];
+s2070488891_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488891 {
+label="page_info: Filter[bag]"labelloc=b;
+2070488893 [label="Project[chararray][1]"];
+2070488892 [label="Project[tuple][0]"];
+2070488921 [label="And[boolean]"];
+2070488895 [label="Not[boolean]"];
+2070488920 [label="Not Equal To[boolean]"];
+2070488894 [label="POIsNull[boolean]"];
+2070488919 [label="Constant(0)"];
+2070488918 [label="Project[int][3]"];
+2070488917 [label="Project[tuple][0]"];
+2070488893 -> 2070488894
+2070488892 -> 2070488893
+2070488895 -> 2070488921
+2070488920 -> 2070488921
+2070488894 -> 2070488895
+2070488919 -> 2070488920
+2070488918 -> 2070488920
+2070488917 -> 2070488918
+s2070488891_in -> 2070488892 [style=invis];
+s2070488891_in -> 2070488919 [style=invis];
+s2070488891_in -> 2070488917 [style=invis];
+};
+2070488921 -> s2070488891_out [style=invis];
+s2070488890_in [label="", style=invis, height=0, width=0];
+s2070488890_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488890 {
+label="parse: New For Each(false)[bag]"labelloc=b;
+2070488888 [label="POUserFunc(myudfs.ExtractPageInfo)[tuple]"];
+2070488887 [label="Cast[chararray]"];
+2070488886 [label="Project[bytearray][0]"];
+2070488887 -> 2070488888
+2070488886 -> 2070488887
+s2070488890_in -> 2070488886 [style=invis];
+};
+2070488888 -> s2070488890_out [style=invis];
+2070489072 [label="outdegree: Store(fakefile,\norg.apache.pig.builtin.PigStorage)", style="filled", fillcolor="gray"];
+s2070488923_in [label="", style=invis, height=0, width=0];
+s2070488923_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488923 {
+label="page_info: Filter[bag]"labelloc=b;
+2070488924 [label="Constant(true)"];
+s2070488923_in -> 2070488924 [style=invis];
+};
+2070488924 -> s2070488923_out [style=invis];
+2070489042 [label="outdegree_temp: Package[tuple]{int}"];
+s2070489043_in [label="", style=invis, height=0, width=0];
+s2070489043_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070489043 {
+label="outdegree_temp: Local Rearrange[tuple]{int}(false)"labelloc=b;
+2070489044 [label="Project[int][0]"];
+s2070489043_in -> 2070489044 [style=invis];
+};
+2070489044 -> s2070489043_out [style=invis];
+2070488922 [label="page_info: Split"];
+s2070488955_in [label="", style=invis, height=0, width=0];
+s2070488955_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488955 {
+label="page_info: Filter[bag]"labelloc=b;
+2070488956 [label="Constant(true)"];
+s2070488955_in -> 2070488956 [style=invis];
+};
+2070488956 -> s2070488955_out [style=invis];
+s2070488954_in [label="", style=invis, height=0, width=0];
+s2070488954_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488954 {
+label="plt: New For Each(false,true)[bag]"labelloc=b;
+2070488926 [label="Project[int][0]"];
+2070488925 [label="Project[tuple][0]"];
+2070488925 -> 2070488926
+s2070488954_in -> 2070488925 [style=invis];
+2070488952 [label="POUserFunc(org.apache.pig.builtin.TOKENIZE)[bag]"];
+2070488949 [label="Project[tuple][0]"];
+2070488951 [label="Constant(|)"];
+2070488950 [label="Project[chararray][2]"];
+2070488949 -> 2070488950
+2070488951 -> 2070488952
+2070488950 -> 2070488952
+s2070488954_in -> 2070488949 [style=invis];
+s2070488954_in -> 2070488951 [style=invis];
+};
+2070488926 -> s2070488954_out [style=invis];
+2070488952 -> s2070488954_out [style=invis];
+2070489041 [label="outdegree_temp: Global Rearrange[tuple]"];
+s2070488987_in [label="", style=invis, height=0, width=0];
+s2070488987_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488987 {
+label="pli_temp: FRJoin[tuple]"labelloc=b;
+2070488985 [label="Project[chararray][1]"];
+s2070488987_in -> 2070488985 [style=invis];
+2070488986 [label="Project[chararray][0]"];
+s2070488987_in -> 2070488986 [style=invis];
+};
+2070488985 -> s2070488987_out [style=invis];
+2070488986 -> s2070488987_out [style=invis];
+s2070488984_in [label="", style=invis, height=0, width=0];
+s2070488984_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488984 {
+label="title_id: New For Each(false,false)[bag]"labelloc=b;
+2070488957 [label="Project[tuple][0]"];
+2070488979 [label="Project[chararray][1]"];
+2070488957 -> 2070488979
+s2070488984_in -> 2070488957 [style=invis];
+2070488982 [label="Project[int][0]"];
+2070488981 [label="Project[tuple][0]"];
+2070488981 -> 2070488982
+s2070488984_in -> 2070488981 [style=invis];
+};
+2070488979 -> s2070488984_out [style=invis];
+2070488982 -> s2070488984_out [style=invis];
+s2070489018_in [label="", style=invis, height=0, width=0];
+s2070489018_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070489018 {
+label="pli: New For Each(false,false)[bag]"labelloc=b;
+2070489014 [label="Project[int][0]"];
+s2070489018_in -> 2070489014 [style=invis];
+2070489016 [label="Project[int][3]"];
+s2070489018_in -> 2070489016 [style=invis];
+};
+2070489014 -> s2070489018_out [style=invis];
+2070489016 -> s2070489018_out [style=invis];
+2070489019 [label="pli_distinct: PODistinct[bag]"];
+s2070489050_in [label="", style=invis, height=0, width=0];
+s2070489050_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070489050 {
+label="outdegree: New For Each(false,false)[bag]"labelloc=b;
+2070489045 [label="Project[int][0]"];
+s2070489050_in -> 2070489045 [style=invis];
+2070489047 [label="Project[bag][1]"];
+2070489048 [label="Project[bag][1]"];
+2070489047 -> 2070489048
+s2070489050_in -> 2070489047 [style=invis];
+};
+2070489045 -> s2070489050_out [style=invis];
+2070489048 -> s2070489050_out [style=invis];
+2070488864 -> s2070488890_in [lhead=cluster_2070488890]
+s2070488891_out -> 2070488922
+s2070488890_out -> s2070488891_in [lhead=cluster_2070488891]
+s2070488923_out -> s2070488954_in [lhead=cluster_2070488954]
+2070489042 -> s2070489050_in [lhead=cluster_2070489050]
+s2070489043_out -> 2070489041
+2070488922 -> s2070488923_in [lhead=cluster_2070488923]
+2070488922 -> s2070488955_in [lhead=cluster_2070488955]
+s2070488955_out -> s2070488984_in [lhead=cluster_2070488984]
+s2070488954_out -> s2070488987_in [lhead=cluster_2070488987]
+2070489041 -> 2070489042
+s2070488987_out -> s2070489018_in [lhead=cluster_2070489018]
+s2070488984_out -> s2070488987_in [lhead=cluster_2070488987]
+s2070489018_out -> 2070489019
+2070489019 -> s2070489043_in [lhead=cluster_2070489043]
+s2070489050_out -> 2070489072
+}
+
+#--------------------------------------------------
+# Map Reduce Plan                                  
+#--------------------------------------------------
+digraph plan {
+compound=true;
+node [shape=rect];
+s2070489076_in [label="", style=invis, height=0, width=0];
+s2070489076_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070489076 {
+label="Map - Reduce, Global Sort: false"; style="filled"; fillcolor="#EEEEEE"labelloc=b;
+s6_in [label="", style=invis, height=0, width=0];
+s6_out [label="", style=invis, height=0, width=0];
+subgraph cluster_6 {
+label="Map"; style="filled"; fillcolor="white"labelloc=b;
+s2070488954_in [label="", style=invis, height=0, width=0];
+s2070488954_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488954 {
+label="plt: New For Each(false,true)[bag]"labelloc=b;
+2070488926 [label="Project[int][0]"];
+2070488925 [label="Project[tuple][0]"];
+2070488925 -> 2070488926
+s2070488954_in -> 2070488925 [style=invis];
+2070488952 [label="POUserFunc(org.apache.pig.builtin.TOKENIZE)[bag]"];
+2070488949 [label="Project[tuple][0]"];
+2070488951 [label="Constant(|)"];
+2070488950 [label="Project[chararray][2]"];
+2070488949 -> 2070488950
+2070488951 -> 2070488952
+2070488950 -> 2070488952
+s2070488954_in -> 2070488949 [style=invis];
+s2070488954_in -> 2070488951 [style=invis];
+};
+2070488926 -> s2070488954_out [style=invis];
+2070488952 -> s2070488954_out [style=invis];
+2070489075 [label="Load(file:/tmp/temp-692251052/tmp-816696685,\norg.apache.pig.impl.io.InterStorage)", style="filled", fillcolor="gray"];
+s2070488987_in [label="", style=invis, height=0, width=0];
+s2070488987_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488987 {
+label="pli_temp: FRJoin[tuple]"labelloc=b;
+2070488985 [label="Project[chararray][1]"];
+s2070488987_in -> 2070488985 [style=invis];
+2070488986 [label="Project[chararray][0]"];
+s2070488987_in -> 2070488986 [style=invis];
+};
+2070488985 -> s2070488987_out [style=invis];
+2070488986 -> s2070488987_out [style=invis];
+s2070489018_in [label="", style=invis, height=0, width=0];
+s2070489018_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070489018 {
+label="pli: New For Each(false,false)[bag]"labelloc=b;
+2070489014 [label="Project[int][0]"];
+s2070489018_in -> 2070489014 [style=invis];
+2070489016 [label="Project[int][3]"];
+s2070489018_in -> 2070489016 [style=invis];
+};
+2070489014 -> s2070489018_out [style=invis];
+2070489016 -> s2070489018_out [style=invis];
+s2070489081_in [label="", style=invis, height=0, width=0];
+s2070489081_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070489081 {
+label="Local Rearrange[tuple]{tuple}(true)"labelloc=b;
+2070489080 [label="Project[tuple][*]"];
+s2070489081_in -> 2070489080 [style=invis];
+};
+2070489080 -> s2070489081_out [style=invis];
+s2070488954_out -> s2070488987_in [lhead=cluster_2070488987]
+2070489075 -> s2070488954_in [lhead=cluster_2070488954]
+s2070488987_out -> s2070489018_in [lhead=cluster_2070489018]
+s2070489018_out -> s2070489081_in [lhead=cluster_2070489081]
+s6_in -> 2070489075 [style=invis];
+};
+s2070489081_out -> s6_out [style=invis];
+s7_in [label="", style=invis, height=0, width=0];
+s7_out [label="", style=invis, height=0, width=0];
+subgraph cluster_7 {
+label="Reduce"; style="filled"; fillcolor="white"labelloc=b;
+s2070489105_in [label="", style=invis, height=0, width=0];
+s2070489105_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070489105 {
+label="New For Each(true)[bag]"labelloc=b;
+2070489104 [label="Project[tuple][0]"];
+s2070489105_in -> 2070489104 [style=invis];
+};
+2070489104 -> s2070489105_out [style=invis];
+2070489106 [label="Store(file:/tmp/temp-692251052/tmp563346547,\norg.apache.pig.impl.io.InterStorage)", style="filled", fillcolor="gray"];
+2070489103 [label="Package[tuple]{tuple}"];
+s2070489105_out -> 2070489106
+2070489103 -> s2070489105_in [lhead=cluster_2070489105]
+s7_in -> 2070489103 [style=invis];
+};
+2070489106 -> s7_out [style=invis];
+s6_out -> s7_in [lhead=cluster_7]
+s2070489076_in -> s6_in [style=invis];
+};
+s7_out -> s2070489076_out [style=invis];
+s2070489108_in [label="", style=invis, height=0, width=0];
+s2070489108_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070489108 {
+label="Map - Reduce, Global Sort: false"; style="filled"; fillcolor="#EEEEEE"labelloc=b;
+s8_in [label="", style=invis, height=0, width=0];
+s8_out [label="", style=invis, height=0, width=0];
+subgraph cluster_8 {
+label="Map"; style="filled"; fillcolor="white"labelloc=b;
+s2070489043_in [label="", style=invis, height=0, width=0];
+s2070489043_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070489043 {
+label="outdegree_temp: Local Rearrange[tuple]{int}(false)"labelloc=b;
+2070489044 [label="Project[int][0]"];
+s2070489043_in -> 2070489044 [style=invis];
+};
+2070489044 -> s2070489043_out [style=invis];
+2070489107 [label="Load(file:/tmp/temp-692251052/tmp563346547,\norg.apache.pig.impl.io.InterStorage)", style="filled", fillcolor="gray"];
+2070489107 -> s2070489043_in [lhead=cluster_2070489043]
+s8_in -> 2070489107 [style=invis];
+};
+s2070489043_out -> s8_out [style=invis];
+s9_in [label="", style=invis, height=0, width=0];
+s9_out [label="", style=invis, height=0, width=0];
+subgraph cluster_9 {
+label="Reduce"; style="filled"; fillcolor="white"labelloc=b;
+2070489072 [label="outdegree: Store(fakefile,\norg.apache.pig.builtin.PigStorage)", style="filled", fillcolor="gray"];
+2070489042 [label="outdegree_temp: Package[tuple]{int}"];
+s2070489050_in [label="", style=invis, height=0, width=0];
+s2070489050_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070489050 {
+label="outdegree: New For Each(false,false)[bag]"labelloc=b;
+2070489045 [label="Project[int][0]"];
+s2070489050_in -> 2070489045 [style=invis];
+2070489047 [label="Project[bag][1]"];
+2070489048 [label="Project[bag][1]"];
+2070489047 -> 2070489048
+s2070489050_in -> 2070489047 [style=invis];
+};
+2070489045 -> s2070489050_out [style=invis];
+2070489048 -> s2070489050_out [style=invis];
+2070489042 -> s2070489050_in [lhead=cluster_2070489050]
+s2070489050_out -> 2070489072
+s9_in -> 2070489042 [style=invis];
+};
+2070489072 -> s9_out [style=invis];
+s8_out -> s9_in [lhead=cluster_9]
+s2070489108_in -> s8_in [style=invis];
+};
+s9_out -> s2070489108_out [style=invis];
+s2070489073_in [label="", style=invis, height=0, width=0];
+s2070489073_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070489073 {
+label="Map, Global Sort: false"; style="filled"; fillcolor="#EEEEEE"labelloc=b;
+s10_in [label="", style=invis, height=0, width=0];
+s10_out [label="", style=invis, height=0, width=0];
+subgraph cluster_10 {
+label="Map"; style="filled"; fillcolor="white"labelloc=b;
+2070489109 [label="Split"];
+2070489079 [label="Store(file:/tmp/temp-692251052/tmp1780910326,\norg.apache.pig.impl.io.InterStorage)", style="filled", fillcolor="gray"];
+s2070488984_in [label="", style=invis, height=0, width=0];
+s2070488984_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488984 {
+label="title_id: New For Each(false,false)[bag]"labelloc=b;
+2070488957 [label="Project[tuple][0]"];
+2070488979 [label="Project[chararray][1]"];
+2070488957 -> 2070488979
+s2070488984_in -> 2070488957 [style=invis];
+2070488982 [label="Project[int][0]"];
+2070488981 [label="Project[tuple][0]"];
+2070488981 -> 2070488982
+s2070488984_in -> 2070488981 [style=invis];
+};
+2070488979 -> s2070488984_out [style=invis];
+2070488982 -> s2070488984_out [style=invis];
+s2070488984_out -> 2070489079
+2070489109 -> s2070488984_in [lhead=cluster_2070488984]
+2070489074 [label="Store(file:/tmp/temp-692251052/tmp-816696685,\norg.apache.pig.impl.io.InterStorage)", style="filled", fillcolor="gray"];
+2070489109 -> 2070489074
+s2070489109_out [label="", style=invis, height=0, width=0];
+2070489079 -> s2070489109_out [style=invis];
+2070489074 -> s2070489109_out [style=invis];
+s2070488891_in [label="", style=invis, height=0, width=0];
+s2070488891_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488891 {
+label="page_info: Filter[bag]"labelloc=b;
+2070488893 [label="Project[chararray][1]"];
+2070488892 [label="Project[tuple][0]"];
+2070488921 [label="And[boolean]"];
+2070488895 [label="Not[boolean]"];
+2070488920 [label="Not Equal To[boolean]"];
+2070488894 [label="POIsNull[boolean]"];
+2070488919 [label="Constant(0)"];
+2070488918 [label="Project[int][3]"];
+2070488917 [label="Project[tuple][0]"];
+2070488893 -> 2070488894
+2070488892 -> 2070488893
+2070488895 -> 2070488921
+2070488920 -> 2070488921
+2070488894 -> 2070488895
+2070488919 -> 2070488920
+2070488918 -> 2070488920
+2070488917 -> 2070488918
+s2070488891_in -> 2070488892 [style=invis];
+s2070488891_in -> 2070488919 [style=invis];
+s2070488891_in -> 2070488917 [style=invis];
+};
+2070488921 -> s2070488891_out [style=invis];
+s2070488890_in [label="", style=invis, height=0, width=0];
+s2070488890_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488890 {
+label="parse: New For Each(false)[bag]"labelloc=b;
+2070488888 [label="POUserFunc(myudfs.ExtractPageInfo)[tuple]"];
+2070488887 [label="Cast[chararray]"];
+2070488886 [label="Project[bytearray][0]"];
+2070488887 -> 2070488888
+2070488886 -> 2070488887
+s2070488890_in -> 2070488886 [style=invis];
+};
+2070488888 -> s2070488890_out [style=invis];
+2070488864 [label="page: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/xml-wiki,\norg.apache.pig.builtin.PigStorage)", style="filled", fillcolor="gray"];
+s2070488891_out -> 2070489109
+s2070488890_out -> s2070488891_in [lhead=cluster_2070488891]
+2070488864 -> s2070488890_in [lhead=cluster_2070488890]
+s10_in -> 2070488864 [style=invis];
+};
+s2070489109_out -> s10_out [style=invis];
+s2070489073_in -> s10_in [style=invis];
+};
+s10_out -> s2070489073_out [style=invis];
+s2070489076_out -> s2070489108_in [lhead=cluster_2070489108]
+s2070489073_out -> s2070489076_in [lhead=cluster_2070489076]
+s2070489073_out -> s2070489076_in [lhead=cluster_2070489076]
+}
+
