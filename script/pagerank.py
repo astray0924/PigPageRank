@@ -23,7 +23,9 @@ P1 = Pig.compile("""
                         flatten(previous_pagerank.links) as links,
                         ((float) (1 - $d)/N.count + $d * SUM(outbound_pagerank.pagerank)) as pagerank:float;
 
-  store new_pagerank into '$docs_out';
+  --store new_pagerank into '$docs_out';
+
+  explain -out explain/pagerank_$iteration.dot -dot new_pagerank;
 
 """)
 
@@ -40,16 +42,19 @@ P2 = Pig.compile("""
   top_100_title_temp = join top_100 by page_id, id_title by page_id using 'replicated';
   top_100_title = foreach top_100_title_temp generate id_title::title as title, top_100::pagerank as pagerank;
 
-  store top_100_title into '$docs_out';
+  --store top_100_title into '$docs_out';
+
+  explain -out explain/result.dot -dot top_100_title;
 """)
 
 # Calculate PageRank
 params = { 'd': '0.85', 'docs_in': 'output/graph' }
-K = 20
+K = 1
 for i in range(K):
     out = "output/pagerank_" + str(i + 1)
     params["docs_out"] = out
-    Pig.fs("rmr " + out)
+    params["iteration"] = str(i + 1)
+    # Pig.fs("rmr " + out)
     bound = P1.bind(params)
     stats = bound.runSingle()
 
