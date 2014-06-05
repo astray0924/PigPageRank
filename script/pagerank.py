@@ -3,8 +3,6 @@
 from org.apache.pig.scripting import *
 
 P1 = Pig.compile("""
-  -- PR(A) = (1-d) + d (PR(T1)/C(T1) + ... + PR(Tn)/C(Tn))
-
   previous_pagerank = load '$docs_in' as (page_id:int, 
                                             links:{link:(link_id:int)}, 
                                             pagerank:float);
@@ -23,9 +21,9 @@ P1 = Pig.compile("""
                         flatten(previous_pagerank.links) as links,
                         ((float) (1 - $d)/N.count + $d * SUM(outbound_pagerank.pagerank)) as pagerank:float;
 
-  --store new_pagerank into '$docs_out';
+  store new_pagerank into '$docs_out';
 
-  explain -out explain/pagerank_$iteration.dot -dot new_pagerank;
+  --explain -out explain/pagerank_$iteration.dot -dot new_pagerank;
 
 """)
 
@@ -50,18 +48,18 @@ P2 = Pig.compile("""
 # Calculate PageRank
 params = { 'd': '0.85', 'docs_in': 'output/graph' }
 K = 20
-# for i in range(K):
-#     out = "output/pagerank_" + str(i + 1)
-#     params["docs_out"] = out
-#     params["iteration"] = str(i + 1)
-#     # Pig.fs("rmr " + out)
-#     bound = P1.bind(params)
-#     stats = bound.runSingle()
+for i in range(K):
+    out = "output/pagerank_" + str(i + 1)
+    params["docs_out"] = out
+    params["iteration"] = str(i + 1)
+    # Pig.fs("rmr " + out)
+    bound = P1.bind(params)
+    stats = bound.runSingle()
 
-#     if not stats.isSuccessful():
-#         raise 'failed'
+    if not stats.isSuccessful():
+        raise 'failed'
     
-#     params["docs_in"] = out
+    params["docs_in"] = out
 
 # Sort and Save Result
 params = {'docs_in': 'output/pagerank_' + str(K), 'docs_out': 'output/result'}

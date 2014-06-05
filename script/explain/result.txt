@@ -1,0 +1,257 @@
+#-----------------------------------------------
+# New Logical Plan:
+#-----------------------------------------------
+top_title: (Name: LOStore Schema: title#7:chararray,pagerank#5:float)ColumnPrune:InputUids=[5, 7]ColumnPrune:OutputUids=[5, 7]
+|
+|---top_title: (Name: LOForEach Schema: title#7:chararray,pagerank#5:float)ColumnPrune:InputUids=[5, 7]ColumnPrune:OutputUids=[5, 7]
+    |   |
+    |   (Name: LOGenerate[false,false] Schema: title#7:chararray,pagerank#5:float)ColumnPrune:InputUids=[5, 7]ColumnPrune:OutputUids=[5, 7]
+    |   |   |
+    |   |   id_title::title:(Name: Project Type: chararray Uid: 7 Input: 0 Column: (*))
+    |   |   |
+    |   |   sorted::pagerank:(Name: Project Type: float Uid: 5 Input: 1 Column: (*))
+    |   |
+    |   |---(Name: LOInnerLoad[3] Schema: id_title::title#7:chararray)
+    |   |
+    |   |---(Name: LOInnerLoad[1] Schema: sorted::pagerank#5:float)
+    |
+    |---top_title_temp: (Name: LOJoin(REPLICATED) Schema: sorted::page_id#1:int,sorted::pagerank#5:float,id_title::page_id#6:int,id_title::title#7:chararray)ColumnPrune:InputUids=[1, 5, 6, 7]ColumnPrune:OutputUids=[5, 7]
+        |   |
+        |   page_id:(Name: Project Type: int Uid: 1 Input: 0 Column: 0)
+        |   |
+        |   page_id:(Name: Project Type: int Uid: 6 Input: 1 Column: 0)
+        |
+        |---sorted: (Name: LOSort Schema: page_id#1:int,pagerank#5:float)ColumnPrune:InputUids=[1, 5]ColumnPrune:OutputUids=[1, 5]
+        |   |   |
+        |   |   pagerank:(Name: Project Type: float Uid: 5 Input: 0 Column: 1)
+        |   |
+        |   |---pagerank: (Name: LOForEach Schema: page_id#1:int,pagerank#5:float)
+        |       |   |
+        |       |   (Name: LOGenerate[false,false] Schema: page_id#1:int,pagerank#5:float)
+        |       |   |   |
+        |       |   |   (Name: Cast Type: int Uid: 1)
+        |       |   |   |
+        |       |   |   |---page_id:(Name: Project Type: bytearray Uid: 1 Input: 0 Column: (*))
+        |       |   |   |
+        |       |   |   (Name: Cast Type: float Uid: 5)
+        |       |   |   |
+        |       |   |   |---pagerank:(Name: Project Type: bytearray Uid: 5 Input: 1 Column: (*))
+        |       |   |
+        |       |   |---(Name: LOInnerLoad[0] Schema: page_id#1:bytearray)
+        |       |   |
+        |       |   |---(Name: LOInnerLoad[1] Schema: pagerank#5:bytearray)
+        |       |
+        |       |---pagerank_temp: (Name: LOLoad Schema: page_id#1:bytearray,pagerank#5:bytearray)ColumnPrune:RequiredColumns=[0, 2]ColumnPrune:InputUids=[1, 5]ColumnPrune:OutputUids=[1, 5]RequiredFields:[0, 2]
+        |
+        |---id_title: (Name: LODistinct Schema: page_id#6:int,title#7:chararray)ColumnPrune:InputUids=[6, 7]ColumnPrune:OutputUids=[6, 7]
+            |
+            |---id_title_temp: (Name: LOForEach Schema: page_id#6:int,title#7:chararray)ColumnPrune:InputUids=[6, 7]ColumnPrune:OutputUids=[6, 7]
+                |   |
+                |   (Name: LOGenerate[false,false] Schema: page_id#6:int,title#7:chararray)ColumnPrune:InputUids=[6, 7]ColumnPrune:OutputUids=[6, 7]
+                |   |   |
+                |   |   (Name: Cast Type: int Uid: 6)
+                |   |   |
+                |   |   |---page_id:(Name: Project Type: bytearray Uid: 6 Input: 0 Column: (*))
+                |   |   |
+                |   |   (Name: Cast Type: chararray Uid: 7)
+                |   |   |
+                |   |   |---title:(Name: Project Type: bytearray Uid: 7 Input: 1 Column: (*))
+                |   |
+                |   |---(Name: LOInnerLoad[0] Schema: page_id#6:bytearray)
+                |   |
+                |   |---(Name: LOInnerLoad[1] Schema: title#7:bytearray)
+                |
+                |---id_title_temp: (Name: LOLoad Schema: page_id#6:bytearray,title#7:bytearray)ColumnPrune:InputUids=[6, 7]ColumnPrune:OutputUids=[6, 7]RequiredFields:null
+
+#-----------------------------------------------
+# Physical Plan:
+#-----------------------------------------------
+top_title: Store(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/result:org.apache.pig.builtin.PigStorage) - scope-32
+|
+|---top_title: New For Each(false,false)[bag] - scope-31
+    |   |
+    |   Project[chararray][3] - scope-27
+    |   |
+    |   Project[float][1] - scope-29
+    |
+    |---top_title_temp: FRJoin[tuple] - scope-21
+        |   |
+        |   Project[int][0] - scope-19
+        |   |
+        |   Project[int][0] - scope-20
+        |
+        |---sorted: POSort[bag]() - scope-9
+        |   |   |
+        |   |   Project[float][1] - scope-8
+        |   |
+        |   |---pagerank: New For Each(false,false)[bag] - scope-7
+        |       |   |
+        |       |   Cast[int] - scope-2
+        |       |   |
+        |       |   |---Project[bytearray][0] - scope-1
+        |       |   |
+        |       |   Cast[float] - scope-5
+        |       |   |
+        |       |   |---Project[bytearray][1] - scope-4
+        |       |
+        |       |---pagerank_temp: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/pagerank_single:org.apache.pig.builtin.PigStorage) - scope-0
+        |
+        |---id_title: PODistinct[bag] - scope-18
+            |
+            |---id_title_temp: New For Each(false,false)[bag] - scope-17
+                |   |
+                |   Cast[int] - scope-12
+                |   |
+                |   |---Project[bytearray][0] - scope-11
+                |   |
+                |   Cast[chararray] - scope-15
+                |   |
+                |   |---Project[bytearray][1] - scope-14
+                |
+                |---id_title_temp: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/id_title:org.apache.pig.builtin.PigStorage) - scope-10
+
+#--------------------------------------------------
+# Map Reduce Plan                                  
+#--------------------------------------------------
+MapReduce node scope-62
+Map Plan
+Local Rearrange[tuple]{tuple}(true) - scope-64
+|   |
+|   Project[tuple][*] - scope-63
+|
+|---id_title_temp: New For Each(false,false)[bag] - scope-17
+    |   |
+    |   Cast[int] - scope-12
+    |   |
+    |   |---Project[bytearray][0] - scope-11
+    |   |
+    |   Cast[chararray] - scope-15
+    |   |
+    |   |---Project[bytearray][1] - scope-14
+    |
+    |---id_title_temp: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/id_title:org.apache.pig.builtin.PigStorage) - scope-10--------
+Reduce Plan
+Store(file:/tmp/temp96725670/tmp645458455:org.apache.pig.impl.io.InterStorage) - scope-68
+|
+|---New For Each(true)[bag] - scope-67
+    |   |
+    |   Project[tuple][0] - scope-66
+    |
+    |---Package[tuple]{tuple} - scope-65--------
+Global sort: false
+----------------
+
+MapReduce node scope-51
+Map Plan
+sorted: Local Rearrange[tuple]{float}(false) - scope-52
+|   |
+|   Project[float][1] - scope-8
+|
+|---Load(file:/tmp/temp96725670/tmp-130606740:org.apache.pig.impl.io.InterStorage) - scope-50--------
+Combine Plan
+Local Rearrange[tuple]{float}(false) - scope-57
+|   |
+|   Project[float][1] - scope-8
+|
+|---Limit - scope-56
+    |
+    |---New For Each(true)[tuple] - scope-55
+        |   |
+        |   Project[bag][1] - scope-54
+        |
+        |---PackageLite[tuple]{float} - scope-53--------
+Reduce Plan
+top_title: Store(file:/tmp/temp96725670/tmp659503476:org.apache.pig.impl.io.InterStorage) - scope-32
+|
+|---Limit - scope-61
+    |
+    |---New For Each(true)[tuple] - scope-60
+        |   |
+        |   Project[bag][1] - scope-59
+        |
+        |---PackageLite[tuple]{float} - scope-58--------
+Global sort: true
+Quantile file: file:/tmp/temp96725670/tmp2030927382
+----------------
+
+MapReduce node scope-69
+Map Plan
+sorted: Local Rearrange[tuple]{float}(false) - scope-72
+|   |
+|   Project[float][1] - scope-71
+|
+|---Load(file:/tmp/temp96725670/tmp659503476:org.apache.pig.impl.io.InterStorage) - scope-70--------
+Reduce Plan
+Store(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/result:org.apache.pig.builtin.PigStorage) - scope-78
+|
+|---top_title: New For Each(false,false)[bag] - scope-31
+    |   |
+    |   Project[chararray][3] - scope-27
+    |   |
+    |   Project[float][1] - scope-29
+    |
+    |---top_title_temp: FRJoin[tuple] - scope-21
+        |   |
+        |   Project[int][0] - scope-19
+        |   |
+        |   Project[int][0] - scope-20
+        |
+        |---Limit - scope-77
+            |
+            |---New For Each(true)[bag] - scope-76
+                |   |
+                |   Project[tuple][1] - scope-75
+                |
+                |---PackageLite[tuple]{float} - scope-74--------
+Global sort: false
+----------------
+
+MapReduce node scope-33
+Map Plan
+Store(file:/tmp/temp96725670/tmp-130606740:org.apache.pig.impl.io.InterStorage) - scope-34
+|
+|---pagerank: New For Each(false,false)[bag] - scope-7
+    |   |
+    |   Cast[int] - scope-2
+    |   |
+    |   |---Project[bytearray][0] - scope-1
+    |   |
+    |   Cast[float] - scope-5
+    |   |
+    |   |---Project[bytearray][1] - scope-4
+    |
+    |---pagerank_temp: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/pagerank_single:org.apache.pig.builtin.PigStorage) - scope-0--------
+Global sort: false
+----------------
+
+MapReduce node scope-36
+Map Plan
+sorted: Local Rearrange[tuple]{tuple}(false) - scope-40
+|   |
+|   Constant(all) - scope-39
+|
+|---New For Each(false)[tuple] - scope-38
+    |   |
+    |   Project[float][1] - scope-37
+    |
+    |---Load(file:/tmp/temp96725670/tmp-130606740:org.apache.pig.impl.builtin.RandomSampleLoader('org.apache.pig.impl.io.InterStorage','100')) - scope-35--------
+Reduce Plan
+Store(file:/tmp/temp96725670/tmp2030927382:org.apache.pig.impl.io.InterStorage) - scope-49
+|
+|---New For Each(false)[tuple] - scope-48
+    |   |
+    |   POUserFunc(org.apache.pig.impl.builtin.FindQuantiles)[tuple] - scope-47
+    |   |
+    |   |---Project[tuple][*] - scope-46
+    |
+    |---New For Each(false,false)[tuple] - scope-45
+        |   |
+        |   Constant(-1) - scope-44
+        |   |
+        |   Project[bag][1] - scope-42
+        |
+        |---Package[tuple]{chararray} - scope-41--------
+Global sort: false
+Secondary sort: true
+----------------
+
