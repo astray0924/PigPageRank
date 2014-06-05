@@ -1,0 +1,231 @@
+#--------------------------------------------------
+# Map Reduce Plan                                  
+#--------------------------------------------------
+MapReduce node scope-118
+Map Plan
+Split - scope-170
+|   |
+|   Store(file:/tmp/temp1886610053/tmp-38252096:org.apache.pig.impl.io.InterStorage) - scope-126
+|   |
+|   |---title_id: New For Each(false,false)[bag] - scope-36
+|       |   |
+|       |   Project[chararray][1] - scope-31
+|       |   |
+|       |   |---Project[tuple][0] - scope-30
+|       |   |
+|       |   Project[int][0] - scope-34
+|       |   |
+|       |   |---Project[tuple][0] - scope-33
+|   |
+|   page_ids: Local Rearrange[tuple]{chararray}(false) - scope-156
+|   |   |
+|   |   Project[chararray][0] - scope-157
+|   |
+|   |---page_count: New For Each(false,false)[bag] - scope-145
+|       |   |
+|       |   Project[chararray][0] - scope-146
+|       |   |
+|       |   POUserFunc(org.apache.pig.builtin.COUNT$Initial)[tuple] - scope-147
+|       |   |
+|       |   |---Project[bag][1] - scope-148
+|       |
+|       |---Pre Combiner Local Rearrange[tuple]{Unknown} - scope-158
+|           |
+|           |---id_title: New For Each(false,false)[bag] - scope-95
+|               |   |
+|               |   Project[int][0] - scope-90
+|               |   |
+|               |   |---Project[tuple][0] - scope-89
+|               |   |
+|               |   Project[chararray][1] - scope-93
+|               |   |
+|               |   |---Project[tuple][0] - scope-92
+|   |
+|   Store(file:/tmp/temp1886610053/tmp-218880167:org.apache.pig.impl.io.InterStorage) - scope-119
+|
+|---page_info: Filter[bag] - scope-6
+    |   |
+    |   And[boolean] - scope-15
+    |   |
+    |   |---Not[boolean] - scope-10
+    |   |   |
+    |   |   |---POIsNull[boolean] - scope-9
+    |   |       |
+    |   |       |---Project[chararray][1] - scope-8
+    |   |           |
+    |   |           |---Project[tuple][0] - scope-7
+    |   |
+    |   |---Not Equal To[boolean] - scope-14
+    |       |
+    |       |---Project[int][3] - scope-12
+    |       |   |
+    |       |   |---Project[tuple][0] - scope-11
+    |       |
+    |       |---Constant(0) - scope-13
+    |
+    |---parse: New For Each(false)[bag] - scope-5
+        |   |
+        |   POUserFunc(myudfs.ExtractPageInfo)[tuple] - scope-3
+        |   |
+        |   |---Cast[chararray] - scope-2
+        |       |
+        |       |---Project[bytearray][0] - scope-1
+        |
+        |---page: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/xml-wiki:org.apache.pig.builtin.PigStorage) - scope-0--------
+Combine Plan
+page_ids: Local Rearrange[tuple]{chararray}(false) - scope-160
+|   |
+|   Project[chararray][0] - scope-161
+|
+|---page_count: New For Each(false,false)[bag] - scope-149
+    |   |
+    |   Project[chararray][0] - scope-150
+    |   |
+    |   POUserFunc(org.apache.pig.builtin.COUNT$Intermediate)[tuple] - scope-151
+    |   |
+    |   |---Project[bag][1] - scope-152
+    |
+    |---POCombinerPackage[tuple]{chararray} - scope-154--------
+Reduce Plan
+page_count: Store(file:/tmp/temp1886610053/tmp1937929899:org.apache.pig.impl.io.InterStorage) - scope-104
+|
+|---page_count: New For Each(false)[bag] - scope-103
+    |   |
+    |   POUserFunc(org.apache.pig.builtin.COUNT$Final)[long] - scope-101
+    |   |
+    |   |---Project[bag][1] - scope-153
+    |
+    |---POCombinerPackage[tuple]{chararray} - scope-162--------
+Global sort: false
+----------------
+
+MapReduce node scope-123
+Map Plan
+Local Rearrange[tuple]{tuple}(true) - scope-128
+|   |
+|   Project[tuple][*] - scope-127
+|
+|---pli: New For Each(false,false)[bag] - scope-49
+    |   |
+    |   Project[int][0] - scope-45
+    |   |
+    |   Project[int][3] - scope-47
+    |
+    |---pli_temp: FRJoin[tuple] - scope-39
+        |   |
+        |   Project[chararray][1] - scope-37
+        |   |
+        |   Project[chararray][0] - scope-38
+        |
+        |---plt: New For Each(false,true)[bag] - scope-27
+            |   |
+            |   Project[int][0] - scope-20
+            |   |
+            |   |---Project[tuple][0] - scope-19
+            |   |
+            |   POUserFunc(org.apache.pig.builtin.TOKENIZE)[bag] - scope-25
+            |   |
+            |   |---Project[chararray][2] - scope-23
+            |   |   |
+            |   |   |---Project[tuple][0] - scope-22
+            |   |
+            |   |---Constant(|) - scope-24
+            |
+            |---Load(file:/tmp/temp1886610053/tmp-218880167:org.apache.pig.impl.io.InterStorage) - scope-122--------
+Reduce Plan
+Store(file:/tmp/temp1886610053/tmp-1371407290:org.apache.pig.impl.io.InterStorage) - scope-132
+|
+|---New For Each(true)[bag] - scope-131
+    |   |
+    |   Project[tuple][0] - scope-130
+    |
+    |---Package[tuple]{tuple} - scope-129--------
+Global sort: false
+----------------
+
+MapReduce node scope-165
+Map Plan
+Split - scope-167
+|   |
+|   outdegree_temp: Local Rearrange[tuple]{int}(false) - scope-56
+|   |   |
+|   |   Project[int][0] - scope-57
+|   |
+|   indegree_temp: Local Rearrange[tuple]{int}(false) - scope-68
+|   |   |
+|   |   Project[int][1] - scope-69
+|
+|---Load(file:/tmp/temp1886610053/tmp-1371407290:org.apache.pig.impl.io.InterStorage) - scope-133--------
+Reduce Plan
+Demux [2] scope-168
+|   |
+|   Store(file:/tmp/temp1886610053/tmp-410471407:org.apache.pig.impl.io.InterStorage) - scope-140
+|   |
+|   |---indegree: New For Each(false,false)[bag] - scope-75
+|       |   |
+|       |   Project[int][0] - scope-70
+|       |   |
+|       |   Project[bag][0] - scope-73
+|       |   |
+|       |   |---Project[bag][1] - scope-72
+|   |
+|   Store(file:/tmp/temp1886610053/tmp-446691464:org.apache.pig.impl.io.InterStorage) - scope-135
+|   |
+|   |---outdegree: New For Each(false,false)[bag] - scope-63
+|       |   |
+|       |   Project[int][0] - scope-58
+|       |   |
+|       |   Project[bag][1] - scope-61
+|       |   |
+|       |   |---Project[bag][1] - scope-60
+|
+|---MultiQuery Package [[true, true]] - scope-169
+    |
+    |---outdegree_temp: Package[tuple]{int} - scope-55
+    |
+    |---indegree_temp: Package[tuple]{int} - scope-67--------
+Global sort: false
+----------------
+
+MapReduce node scope-143
+Map Plan
+Union[tuple] - scope-144
+|
+|---node_temp: Local Rearrange[tuple]{int}(false) - scope-80
+|   |   |
+|   |   Project[int][0] - scope-81
+|   |
+|   |---Load(file:/tmp/temp1886610053/tmp-446691464:org.apache.pig.impl.io.InterStorage) - scope-136
+|
+|---node_temp: Local Rearrange[tuple]{int}(false) - scope-82
+    |   |
+    |   Project[int][0] - scope-83
+    |
+    |---Load(file:/tmp/temp1886610053/tmp-410471407:org.apache.pig.impl.io.InterStorage) - scope-141--------
+Reduce Plan
+graph: Store(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/graph:org.apache.pig.builtin.PigStorage) - scope-117
+|
+|---graph: New For Each(false,false,false)[bag] - scope-116
+    |   |
+    |   Project[int][0] - scope-105
+    |   |
+    |   Project[bag][1] - scope-107
+    |   |
+    |   Divide[float] - scope-115
+    |   |
+    |   |---Cast[float] - scope-110
+    |   |   |
+    |   |   |---Constant(1) - scope-109
+    |   |
+    |   |---Cast[float] - scope-114
+    |       |
+    |       |---POUserFunc(org.apache.pig.impl.builtin.ReadScalars)[long] - scope-113
+    |           |
+    |           |---Constant(0) - scope-111
+    |           |
+    |           |---Constant(file:/tmp/temp1886610053/tmp1937929899) - scope-112
+    |
+    |---POJoinPackage(true,true)[tuple] - scope-163--------
+Global sort: false
+----------------
+

@@ -1,0 +1,429 @@
+#-----------------------------------------------
+# New Logical Plan:
+#-----------------------------------------------
+graph: (Name: LOStore Schema: page_id#192:int,links#197:bag{#196:tuple(link_id#193:int)},score#220:float)
+|
+|---graph: (Name: LOForEach Schema: page_id#192:int,links#197:bag{#196:tuple(link_id#193:int)},score#220:float)
+    |   |
+    |   (Name: LOGenerate[false,false,false] Schema: page_id#192:int,links#197:bag{#196:tuple(link_id#193:int)},score#220:float)ColumnPrune:InputUids=[197, 192]ColumnPrune:OutputUids=[220, 197, 192]
+    |   |   |
+    |   |   outdegree::page_id:(Name: Project Type: int Uid: 192 Input: 0 Column: (*))
+    |   |   |
+    |   |   outdegree::links:(Name: Project Type: bag Uid: 197 Input: 1 Column: (*))
+    |   |   |
+    |   |   (Name: Divide Type: float Uid: 220)
+    |   |   |
+    |   |   |---(Name: Cast Type: float Uid: 215)
+    |   |   |   |
+    |   |   |   |---(Name: Constant Type: int Uid: 215)
+    |   |   |
+    |   |   |---(Name: Cast Type: float Uid: 214)
+    |   |       |
+    |   |       |---(Name: ScalarExpression) Type: long Uid: 214)
+    |   |           |
+    |   |           |---(Name: Constant Type: int Uid: 217)
+    |   |           |
+    |   |           |---(Name: Constant Type: chararray Uid: 218)
+    |   |
+    |   |---(Name: LOInnerLoad[0] Schema: outdegree::page_id#192:int)
+    |   |
+    |   |---outdegree::links: (Name: LOInnerLoad[1] Schema: link_id#193:int)
+    |
+    |---node_temp: (Name: LOJoin(HASH) Schema: outdegree::page_id#192:int,outdegree::links#197:bag{#196:tuple(link_id#193:int)},indegree::page_id#200:int,indegree::links#204:bag{#203:tuple(page_id#199:int)})
+        |   |
+        |   page_id:(Name: Project Type: int Uid: 192 Input: 0 Column: 0)
+        |   |
+        |   page_id:(Name: Project Type: int Uid: 200 Input: 1 Column: 0)
+        |
+        |---outdegree: (Name: LOForEach Schema: page_id#192:int,links#197:bag{#196:tuple(link_id#193:int)})
+        |   |   |
+        |   |   (Name: LOGenerate[false,false] Schema: page_id#192:int,links#197:bag{#196:tuple(link_id#193:int)})ColumnPrune:InputUids=[192, 194]ColumnPrune:OutputUids=[197, 192]
+        |   |   |   |
+        |   |   |   group:(Name: Project Type: int Uid: 192 Input: 0 Column: (*))
+        |   |   |   |
+        |   |   |   (Name: Dereference Type: bag Uid: 197 Column:[1])
+        |   |   |   |
+        |   |   |   |---pli_distinct:(Name: Project Type: bag Uid: 194 Input: 1 Column: (*))
+        |   |   |
+        |   |   |---(Name: LOInnerLoad[0] Schema: group#192:int)
+        |   |   |
+        |   |   |---pli_distinct: (Name: LOInnerLoad[1] Schema: page_id#192:int,link_id#193:int)
+        |   |
+        |   |---outdegree_temp: (Name: LOCogroup Schema: group#192:int,pli_distinct#194:bag{#222:tuple(page_id#192:int,link_id#193:int)})
+        |       |   |
+        |       |   page_id:(Name: Project Type: int Uid: 192 Input: 0 Column: 0)
+        |       |
+        |       |---pli_distinct: (Name: LOSplitOutput Schema: page_id#192:int,link_id#193:int)
+        |           |   |
+        |           |   (Name: Constant Type: boolean Uid: 191)
+        |           |
+        |           |---pli_distinct: (Name: LOSplit Schema: page_id#176:int,link_id#186:int)
+        |               |
+        |               |---pli_distinct: (Name: LODistinct Schema: page_id#176:int,link_id#186:int)
+        |                   |
+        |                   |---pli: (Name: LOForEach Schema: page_id#176:int,link_id#186:int)
+        |                       |   |
+        |                       |   (Name: LOGenerate[false,false] Schema: page_id#176:int,link_id#186:int)ColumnPrune:InputUids=[186, 176]ColumnPrune:OutputUids=[186, 176]
+        |                       |   |   |
+        |                       |   |   plt::id:(Name: Project Type: int Uid: 176 Input: 0 Column: (*))
+        |                       |   |   |
+        |                       |   |   title_id::id:(Name: Project Type: int Uid: 186 Input: 1 Column: (*))
+        |                       |   |
+        |                       |   |---(Name: LOInnerLoad[0] Schema: plt::id#176:int)
+        |                       |   |
+        |                       |   |---(Name: LOInnerLoad[3] Schema: title_id::id#186:int)
+        |                       |
+        |                       |---pli_temp: (Name: LOJoin(REPLICATED) Schema: plt::id#176:int,plt::outlink#184:chararray,title_id::title#187:chararray,title_id::id#186:int)
+        |                           |   |
+        |                           |   outlink:(Name: Project Type: chararray Uid: 184 Input: 0 Column: 1)
+        |                           |   |
+        |                           |   title:(Name: Project Type: chararray Uid: 187 Input: 1 Column: 0)
+        |                           |
+        |                           |---plt: (Name: LOForEach Schema: id#176:int,outlink#184:chararray)
+        |                           |   |   |
+        |                           |   |   (Name: LOGenerate[false,true] Schema: id#176:int,outlink#184:chararray)ColumnPrune:InputUids=[180]ColumnPrune:OutputUids=[184, 176]
+        |                           |   |   |   |
+        |                           |   |   |   (Name: Dereference Type: int Uid: 176 Column:[0])
+        |                           |   |   |   |
+        |                           |   |   |   |---info:(Name: Project Type: tuple Uid: 180 Input: 0 Column: (*))
+        |                           |   |   |   |
+        |                           |   |   |   (Name: UserFunc(org.apache.pig.builtin.TOKENIZE) Type: bag Uid: 182)
+        |                           |   |   |   |
+        |                           |   |   |   |---(Name: Dereference Type: chararray Uid: 178 Column:[2])
+        |                           |   |   |   |   |
+        |                           |   |   |   |   |---info:(Name: Project Type: tuple Uid: 180 Input: 1 Column: (*))
+        |                           |   |   |   |
+        |                           |   |   |   |---(Name: Constant Type: chararray Uid: 181)
+        |                           |   |   |
+        |                           |   |   |---(Name: LOInnerLoad[0] Schema: info#180:tuple(id#176:int,title#177:chararray,outlinks#178:chararray,outlinks_count#179:int))
+        |                           |   |   |
+        |                           |   |   |---(Name: LOInnerLoad[0] Schema: info#180:tuple(id#176:int,title#177:chararray,outlinks#178:chararray,outlinks_count#179:int))
+        |                           |   |
+        |                           |   |---page_info: (Name: LOSplitOutput Schema: info#180:tuple(id#176:int,title#177:chararray,outlinks#178:chararray,outlinks_count#179:int))
+        |                           |       |   |
+        |                           |       |   (Name: Constant Type: boolean Uid: 175)
+        |                           |       |
+        |                           |       |---page_info: (Name: LOSplit Schema: info#165:tuple(id#166:int,title#167:chararray,outlinks#168:chararray,outlinks_count#169:int))
+        |                           |           |
+        |                           |           |---page_info: (Name: LOFilter Schema: info#165:tuple(id#166:int,title#167:chararray,outlinks#168:chararray,outlinks_count#169:int))
+        |                           |               |   |
+        |                           |               |   (Name: And Type: boolean Uid: 229)
+        |                           |               |   |
+        |                           |               |   |---(Name: Not Type: boolean Uid: 171)
+        |                           |               |   |   |
+        |                           |               |   |   |---(Name: IsNull Type: boolean Uid: 170)
+        |                           |               |   |       |
+        |                           |               |   |       |---(Name: Dereference Type: chararray Uid: 167 Column:[1])
+        |                           |               |   |           |
+        |                           |               |   |           |---info:(Name: Project Type: tuple Uid: 165 Input: 0 Column: 0)
+        |                           |               |   |
+        |                           |               |   |---(Name: NotEqual Type: boolean Uid: 173)
+        |                           |               |       |
+        |                           |               |       |---(Name: Dereference Type: int Uid: 169 Column:[3])
+        |                           |               |       |   |
+        |                           |               |       |   |---info:(Name: Project Type: tuple Uid: 165 Input: 0 Column: 0)
+        |                           |               |       |
+        |                           |               |       |---(Name: Constant Type: int Uid: 172)
+        |                           |               |
+        |                           |               |---parse: (Name: LOForEach Schema: info#231:tuple(id#232:int,title#233:chararray,outlinks#234:chararray,outlinks_count#235:int))
+        |                           |                   |   |
+        |                           |                   |   (Name: LOGenerate[false] Schema: info#231:tuple(id#232:int,title#233:chararray,outlinks#234:chararray,outlinks_count#235:int))
+        |                           |                   |   |   |
+        |                           |                   |   |   (Name: UserFunc(myudfs.ExtractPageInfo) Type: tuple Uid: 231)
+        |                           |                   |   |   |
+        |                           |                   |   |   |---(Name: Cast Type: chararray Uid: 1)
+        |                           |                   |   |       |
+        |                           |                   |   |       |---html:(Name: Project Type: bytearray Uid: 1 Input: 0 Column: (*))
+        |                           |                   |   |
+        |                           |                   |   |---(Name: LOInnerLoad[0] Schema: html#1:bytearray)
+        |                           |                   |
+        |                           |                   |---page: (Name: LOLoad Schema: html#1:bytearray)RequiredFields:null
+        |                           |
+        |                           |---title_id: (Name: LOForEach Schema: title#187:chararray,id#186:int)
+        |                               |   |
+        |                               |   (Name: LOGenerate[false,false] Schema: title#187:chararray,id#186:int)ColumnPrune:InputUids=[190]ColumnPrune:OutputUids=[186, 187]
+        |                               |   |   |
+        |                               |   |   (Name: Dereference Type: chararray Uid: 187 Column:[1])
+        |                               |   |   |
+        |                               |   |   |---info:(Name: Project Type: tuple Uid: 190 Input: 0 Column: (*))
+        |                               |   |   |
+        |                               |   |   (Name: Dereference Type: int Uid: 186 Column:[0])
+        |                               |   |   |
+        |                               |   |   |---info:(Name: Project Type: tuple Uid: 190 Input: 1 Column: (*))
+        |                               |   |
+        |                               |   |---(Name: LOInnerLoad[0] Schema: info#190:tuple(id#186:int,title#187:chararray,outlinks#188:chararray,outlinks_count#189:int))
+        |                               |   |
+        |                               |   |---(Name: LOInnerLoad[0] Schema: info#190:tuple(id#186:int,title#187:chararray,outlinks#188:chararray,outlinks_count#189:int))
+        |                               |
+        |                               |---page_info: (Name: LOSplitOutput Schema: info#190:tuple(id#186:int,title#187:chararray,outlinks#188:chararray,outlinks_count#189:int))
+        |                                   |   |
+        |                                   |   (Name: Constant Type: boolean Uid: 185)
+        |                                   |
+        |                                   |---page_info: (Name: LOSplit Schema: info#165:tuple(id#166:int,title#167:chararray,outlinks#168:chararray,outlinks_count#169:int))
+        |                                       |
+        |                                       |---page_info: (Name: LOFilter Schema: info#165:tuple(id#166:int,title#167:chararray,outlinks#168:chararray,outlinks_count#169:int))
+        |                                           |   |
+        |                                           |   (Name: And Type: boolean Uid: 229)
+        |                                           |   |
+        |                                           |   |---(Name: Not Type: boolean Uid: 171)
+        |                                           |   |   |
+        |                                           |   |   |---(Name: IsNull Type: boolean Uid: 170)
+        |                                           |   |       |
+        |                                           |   |       |---(Name: Dereference Type: chararray Uid: 167 Column:[1])
+        |                                           |   |           |
+        |                                           |   |           |---info:(Name: Project Type: tuple Uid: 165 Input: 0 Column: 0)
+        |                                           |   |
+        |                                           |   |---(Name: NotEqual Type: boolean Uid: 173)
+        |                                           |       |
+        |                                           |       |---(Name: Dereference Type: int Uid: 169 Column:[3])
+        |                                           |       |   |
+        |                                           |       |   |---info:(Name: Project Type: tuple Uid: 165 Input: 0 Column: 0)
+        |                                           |       |
+        |                                           |       |---(Name: Constant Type: int Uid: 172)
+        |                                           |
+        |                                           |---parse: (Name: LOForEach Schema: info#231:tuple(id#232:int,title#233:chararray,outlinks#234:chararray,outlinks_count#235:int))
+        |                                               |   |
+        |                                               |   (Name: LOGenerate[false] Schema: info#231:tuple(id#232:int,title#233:chararray,outlinks#234:chararray,outlinks_count#235:int))
+        |                                               |   |   |
+        |                                               |   |   (Name: UserFunc(myudfs.ExtractPageInfo) Type: tuple Uid: 231)
+        |                                               |   |   |
+        |                                               |   |   |---(Name: Cast Type: chararray Uid: 1)
+        |                                               |   |       |
+        |                                               |   |       |---html:(Name: Project Type: bytearray Uid: 1 Input: 0 Column: (*))
+        |                                               |   |
+        |                                               |   |---(Name: LOInnerLoad[0] Schema: html#1:bytearray)
+        |                                               |
+        |                                               |---page: (Name: LOLoad Schema: html#1:bytearray)RequiredFields:null
+        |
+        |---indegree: (Name: LOForEach Schema: page_id#200:int,links#204:bag{#203:tuple(page_id#199:int)})
+            |   |
+            |   (Name: LOGenerate[false,false] Schema: page_id#200:int,links#204:bag{#203:tuple(page_id#199:int)})ColumnPrune:InputUids=[200]ColumnPrune:OutputUids=[200]
+            |   |   |
+            |   |   group:(Name: Project Type: int Uid: 200 Input: 0 Column: (*))
+            |   |   |
+            |   |   (Name: Dereference Type: bag Uid: 204 Column:[0])
+            |   |   |
+            |   |   |---pli_distinct:(Name: Project Type: bag Uid: 201 Input: 1 Column: (*))
+            |   |
+            |   |---(Name: LOInnerLoad[0] Schema: group#200:int)
+            |   |
+            |   |---pli_distinct: (Name: LOInnerLoad[1] Schema: page_id#199:int,link_id#200:int)
+            |
+            |---indegree_temp: (Name: LOCogroup Schema: group#200:int,pli_distinct#201:bag{#225:tuple(page_id#199:int,link_id#200:int)})
+                |   |
+                |   link_id:(Name: Project Type: int Uid: 200 Input: 0 Column: 1)
+                |
+                |---pli_distinct: (Name: LOSplitOutput Schema: page_id#199:int,link_id#200:int)
+                    |   |
+                    |   (Name: Constant Type: boolean Uid: 198)
+                    |
+                    |---pli_distinct: (Name: LOSplit Schema: page_id#176:int,link_id#186:int)
+                        |
+                        |---pli_distinct: (Name: LODistinct Schema: page_id#176:int,link_id#186:int)
+                            |
+                            |---pli: (Name: LOForEach Schema: page_id#176:int,link_id#186:int)
+                                |   |
+                                |   (Name: LOGenerate[false,false] Schema: page_id#176:int,link_id#186:int)ColumnPrune:InputUids=[186, 176]ColumnPrune:OutputUids=[186, 176]
+                                |   |   |
+                                |   |   plt::id:(Name: Project Type: int Uid: 176 Input: 0 Column: (*))
+                                |   |   |
+                                |   |   title_id::id:(Name: Project Type: int Uid: 186 Input: 1 Column: (*))
+                                |   |
+                                |   |---(Name: LOInnerLoad[0] Schema: plt::id#176:int)
+                                |   |
+                                |   |---(Name: LOInnerLoad[3] Schema: title_id::id#186:int)
+                                |
+                                |---pli_temp: (Name: LOJoin(REPLICATED) Schema: plt::id#176:int,plt::outlink#184:chararray,title_id::title#187:chararray,title_id::id#186:int)
+                                    |   |
+                                    |   outlink:(Name: Project Type: chararray Uid: 184 Input: 0 Column: 1)
+                                    |   |
+                                    |   title:(Name: Project Type: chararray Uid: 187 Input: 1 Column: 0)
+                                    |
+                                    |---plt: (Name: LOForEach Schema: id#176:int,outlink#184:chararray)
+                                    |   |   |
+                                    |   |   (Name: LOGenerate[false,true] Schema: id#176:int,outlink#184:chararray)ColumnPrune:InputUids=[180]ColumnPrune:OutputUids=[184, 176]
+                                    |   |   |   |
+                                    |   |   |   (Name: Dereference Type: int Uid: 176 Column:[0])
+                                    |   |   |   |
+                                    |   |   |   |---info:(Name: Project Type: tuple Uid: 180 Input: 0 Column: (*))
+                                    |   |   |   |
+                                    |   |   |   (Name: UserFunc(org.apache.pig.builtin.TOKENIZE) Type: bag Uid: 182)
+                                    |   |   |   |
+                                    |   |   |   |---(Name: Dereference Type: chararray Uid: 178 Column:[2])
+                                    |   |   |   |   |
+                                    |   |   |   |   |---info:(Name: Project Type: tuple Uid: 180 Input: 1 Column: (*))
+                                    |   |   |   |
+                                    |   |   |   |---(Name: Constant Type: chararray Uid: 181)
+                                    |   |   |
+                                    |   |   |---(Name: LOInnerLoad[0] Schema: info#180:tuple(id#176:int,title#177:chararray,outlinks#178:chararray,outlinks_count#179:int))
+                                    |   |   |
+                                    |   |   |---(Name: LOInnerLoad[0] Schema: info#180:tuple(id#176:int,title#177:chararray,outlinks#178:chararray,outlinks_count#179:int))
+                                    |   |
+                                    |   |---page_info: (Name: LOSplitOutput Schema: info#180:tuple(id#176:int,title#177:chararray,outlinks#178:chararray,outlinks_count#179:int))
+                                    |       |   |
+                                    |       |   (Name: Constant Type: boolean Uid: 175)
+                                    |       |
+                                    |       |---page_info: (Name: LOSplit Schema: info#165:tuple(id#166:int,title#167:chararray,outlinks#168:chararray,outlinks_count#169:int))
+                                    |           |
+                                    |           |---page_info: (Name: LOFilter Schema: info#165:tuple(id#166:int,title#167:chararray,outlinks#168:chararray,outlinks_count#169:int))
+                                    |               |   |
+                                    |               |   (Name: And Type: boolean Uid: 229)
+                                    |               |   |
+                                    |               |   |---(Name: Not Type: boolean Uid: 171)
+                                    |               |   |   |
+                                    |               |   |   |---(Name: IsNull Type: boolean Uid: 170)
+                                    |               |   |       |
+                                    |               |   |       |---(Name: Dereference Type: chararray Uid: 167 Column:[1])
+                                    |               |   |           |
+                                    |               |   |           |---info:(Name: Project Type: tuple Uid: 165 Input: 0 Column: 0)
+                                    |               |   |
+                                    |               |   |---(Name: NotEqual Type: boolean Uid: 173)
+                                    |               |       |
+                                    |               |       |---(Name: Dereference Type: int Uid: 169 Column:[3])
+                                    |               |       |   |
+                                    |               |       |   |---info:(Name: Project Type: tuple Uid: 165 Input: 0 Column: 0)
+                                    |               |       |
+                                    |               |       |---(Name: Constant Type: int Uid: 172)
+                                    |               |
+                                    |               |---parse: (Name: LOForEach Schema: info#231:tuple(id#232:int,title#233:chararray,outlinks#234:chararray,outlinks_count#235:int))
+                                    |                   |   |
+                                    |                   |   (Name: LOGenerate[false] Schema: info#231:tuple(id#232:int,title#233:chararray,outlinks#234:chararray,outlinks_count#235:int))
+                                    |                   |   |   |
+                                    |                   |   |   (Name: UserFunc(myudfs.ExtractPageInfo) Type: tuple Uid: 231)
+                                    |                   |   |   |
+                                    |                   |   |   |---(Name: Cast Type: chararray Uid: 1)
+                                    |                   |   |       |
+                                    |                   |   |       |---html:(Name: Project Type: bytearray Uid: 1 Input: 0 Column: (*))
+                                    |                   |   |
+                                    |                   |   |---(Name: LOInnerLoad[0] Schema: html#1:bytearray)
+                                    |                   |
+                                    |                   |---page: (Name: LOLoad Schema: html#1:bytearray)RequiredFields:null
+                                    |
+                                    |---title_id: (Name: LOForEach Schema: title#187:chararray,id#186:int)
+                                        |   |
+                                        |   (Name: LOGenerate[false,false] Schema: title#187:chararray,id#186:int)ColumnPrune:InputUids=[190]ColumnPrune:OutputUids=[186, 187]
+                                        |   |   |
+                                        |   |   (Name: Dereference Type: chararray Uid: 187 Column:[1])
+                                        |   |   |
+                                        |   |   |---info:(Name: Project Type: tuple Uid: 190 Input: 0 Column: (*))
+                                        |   |   |
+                                        |   |   (Name: Dereference Type: int Uid: 186 Column:[0])
+                                        |   |   |
+                                        |   |   |---info:(Name: Project Type: tuple Uid: 190 Input: 1 Column: (*))
+                                        |   |
+                                        |   |---(Name: LOInnerLoad[0] Schema: info#190:tuple(id#186:int,title#187:chararray,outlinks#188:chararray,outlinks_count#189:int))
+                                        |   |
+                                        |   |---(Name: LOInnerLoad[0] Schema: info#190:tuple(id#186:int,title#187:chararray,outlinks#188:chararray,outlinks_count#189:int))
+                                        |
+                                        |---page_info: (Name: LOSplitOutput Schema: info#190:tuple(id#186:int,title#187:chararray,outlinks#188:chararray,outlinks_count#189:int))
+                                            |   |
+                                            |   (Name: Constant Type: boolean Uid: 185)
+                                            |
+                                            |---page_info: (Name: LOSplit Schema: info#165:tuple(id#166:int,title#167:chararray,outlinks#168:chararray,outlinks_count#169:int))
+                                                |
+                                                |---page_info: (Name: LOFilter Schema: info#165:tuple(id#166:int,title#167:chararray,outlinks#168:chararray,outlinks_count#169:int))
+                                                    |   |
+                                                    |   (Name: And Type: boolean Uid: 229)
+                                                    |   |
+                                                    |   |---(Name: Not Type: boolean Uid: 171)
+                                                    |   |   |
+                                                    |   |   |---(Name: IsNull Type: boolean Uid: 170)
+                                                    |   |       |
+                                                    |   |       |---(Name: Dereference Type: chararray Uid: 167 Column:[1])
+                                                    |   |           |
+                                                    |   |           |---info:(Name: Project Type: tuple Uid: 165 Input: 0 Column: 0)
+                                                    |   |
+                                                    |   |---(Name: NotEqual Type: boolean Uid: 173)
+                                                    |       |
+                                                    |       |---(Name: Dereference Type: int Uid: 169 Column:[3])
+                                                    |       |   |
+                                                    |       |   |---info:(Name: Project Type: tuple Uid: 165 Input: 0 Column: 0)
+                                                    |       |
+                                                    |       |---(Name: Constant Type: int Uid: 172)
+                                                    |
+                                                    |---parse: (Name: LOForEach Schema: info#231:tuple(id#232:int,title#233:chararray,outlinks#234:chararray,outlinks_count#235:int))
+                                                        |   |
+                                                        |   (Name: LOGenerate[false] Schema: info#231:tuple(id#232:int,title#233:chararray,outlinks#234:chararray,outlinks_count#235:int))
+                                                        |   |   |
+                                                        |   |   (Name: UserFunc(myudfs.ExtractPageInfo) Type: tuple Uid: 231)
+                                                        |   |   |
+                                                        |   |   |---(Name: Cast Type: chararray Uid: 1)
+                                                        |   |       |
+                                                        |   |       |---html:(Name: Project Type: bytearray Uid: 1 Input: 0 Column: (*))
+                                                        |   |
+                                                        |   |---(Name: LOInnerLoad[0] Schema: html#1:bytearray)
+                                                        |
+                                                        |---page: (Name: LOLoad Schema: html#1:bytearray)RequiredFields:null
+
+page_count: (Name: LOStore Schema: count#214:long)
+|
+|---page_count: (Name: LOForEach Schema: count#214:long)
+    |   |
+    |   (Name: LOGenerate[false] Schema: count#214:long)ColumnPrune:InputUids=[212]ColumnPrune:OutputUids=[214]
+    |   |   |
+    |   |   (Name: UserFunc(org.apache.pig.builtin.COUNT) Type: long Uid: 214)
+    |   |   |
+    |   |   |---id_title:(Name: Project Type: bag Uid: 212 Input: 0 Column: (*))
+    |   |
+    |   |---id_title: (Name: LOInnerLoad[1] Schema: id#206:int,title#207:chararray)
+    |
+    |---page_ids: (Name: LOCogroup Schema: group#211:chararray,id_title#212:bag{#228:tuple(id#206:int,title#207:chararray)})
+        |   |
+        |   (Name: Constant Type: chararray Uid: 211)
+        |
+        |---id_title: (Name: LOForEach Schema: id#206:int,title#207:chararray)
+            |   |
+            |   (Name: LOGenerate[false,false] Schema: id#206:int,title#207:chararray)ColumnPrune:InputUids=[210]ColumnPrune:OutputUids=[207, 206]
+            |   |   |
+            |   |   (Name: Dereference Type: int Uid: 206 Column:[0])
+            |   |   |
+            |   |   |---info:(Name: Project Type: tuple Uid: 210 Input: 0 Column: (*))
+            |   |   |
+            |   |   (Name: Dereference Type: chararray Uid: 207 Column:[1])
+            |   |   |
+            |   |   |---info:(Name: Project Type: tuple Uid: 210 Input: 1 Column: (*))
+            |   |
+            |   |---(Name: LOInnerLoad[0] Schema: info#210:tuple(id#206:int,title#207:chararray,outlinks#208:chararray,outlinks_count#209:int))
+            |   |
+            |   |---(Name: LOInnerLoad[0] Schema: info#210:tuple(id#206:int,title#207:chararray,outlinks#208:chararray,outlinks_count#209:int))
+            |
+            |---page_info: (Name: LOSplitOutput Schema: info#210:tuple(id#206:int,title#207:chararray,outlinks#208:chararray,outlinks_count#209:int))
+                |   |
+                |   (Name: Constant Type: boolean Uid: 205)
+                |
+                |---page_info: (Name: LOSplit Schema: info#165:tuple(id#166:int,title#167:chararray,outlinks#168:chararray,outlinks_count#169:int))
+                    |
+                    |---page_info: (Name: LOFilter Schema: info#165:tuple(id#166:int,title#167:chararray,outlinks#168:chararray,outlinks_count#169:int))
+                        |   |
+                        |   (Name: And Type: boolean Uid: 229)
+                        |   |
+                        |   |---(Name: Not Type: boolean Uid: 171)
+                        |   |   |
+                        |   |   |---(Name: IsNull Type: boolean Uid: 170)
+                        |   |       |
+                        |   |       |---(Name: Dereference Type: chararray Uid: 167 Column:[1])
+                        |   |           |
+                        |   |           |---info:(Name: Project Type: tuple Uid: 165 Input: 0 Column: 0)
+                        |   |
+                        |   |---(Name: NotEqual Type: boolean Uid: 173)
+                        |       |
+                        |       |---(Name: Dereference Type: int Uid: 169 Column:[3])
+                        |       |   |
+                        |       |   |---info:(Name: Project Type: tuple Uid: 165 Input: 0 Column: 0)
+                        |       |
+                        |       |---(Name: Constant Type: int Uid: 172)
+                        |
+                        |---parse: (Name: LOForEach Schema: info#231:tuple(id#232:int,title#233:chararray,outlinks#234:chararray,outlinks_count#235:int))
+                            |   |
+                            |   (Name: LOGenerate[false] Schema: info#231:tuple(id#232:int,title#233:chararray,outlinks#234:chararray,outlinks_count#235:int))
+                            |   |   |
+                            |   |   (Name: UserFunc(myudfs.ExtractPageInfo) Type: tuple Uid: 231)
+                            |   |   |
+                            |   |   |---(Name: Cast Type: chararray Uid: 1)
+                            |   |       |
+                            |   |       |---html:(Name: Project Type: bytearray Uid: 1 Input: 0 Column: (*))
+                            |   |
+                            |   |---(Name: LOInnerLoad[0] Schema: html#1:bytearray)
+                            |
+                            |---page: (Name: LOLoad Schema: html#1:bytearray)RequiredFields:null
+

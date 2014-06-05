@@ -1,0 +1,65 @@
+#-----------------------------------------------
+# New Logical Plan:
+#-----------------------------------------------
+top_title: (Name: LOStore Schema: title#7:chararray,pagerank#5:float)ColumnPrune:InputUids=[5, 7]ColumnPrune:OutputUids=[5, 7]
+|
+|---top_title: (Name: LOForEach Schema: title#7:chararray,pagerank#5:float)ColumnPrune:InputUids=[5, 7]ColumnPrune:OutputUids=[5, 7]
+    |   |
+    |   (Name: LOGenerate[false,false] Schema: title#7:chararray,pagerank#5:float)ColumnPrune:InputUids=[5, 7]ColumnPrune:OutputUids=[5, 7]
+    |   |   |
+    |   |   id_title::title:(Name: Project Type: chararray Uid: 7 Input: 0 Column: (*))
+    |   |   |
+    |   |   sorted::pagerank:(Name: Project Type: float Uid: 5 Input: 1 Column: (*))
+    |   |
+    |   |---(Name: LOInnerLoad[3] Schema: id_title::title#7:chararray)
+    |   |
+    |   |---(Name: LOInnerLoad[1] Schema: sorted::pagerank#5:float)
+    |
+    |---top_title_temp: (Name: LOJoin(REPLICATED) Schema: sorted::page_id#1:int,sorted::pagerank#5:float,id_title::page_id#6:int,id_title::title#7:chararray)ColumnPrune:InputUids=[1, 5, 6, 7]ColumnPrune:OutputUids=[5, 7]
+        |   |
+        |   page_id:(Name: Project Type: int Uid: 1 Input: 0 Column: 0)
+        |   |
+        |   page_id:(Name: Project Type: int Uid: 6 Input: 1 Column: 0)
+        |
+        |---sorted: (Name: LOSort Schema: page_id#1:int,pagerank#5:float)ColumnPrune:InputUids=[1, 5]ColumnPrune:OutputUids=[1, 5]
+        |   |   |
+        |   |   pagerank:(Name: Project Type: float Uid: 5 Input: 0 Column: 1)
+        |   |
+        |   |---pagerank: (Name: LOForEach Schema: page_id#1:int,pagerank#5:float)
+        |       |   |
+        |       |   (Name: LOGenerate[false,false] Schema: page_id#1:int,pagerank#5:float)
+        |       |   |   |
+        |       |   |   (Name: Cast Type: int Uid: 1)
+        |       |   |   |
+        |       |   |   |---page_id:(Name: Project Type: bytearray Uid: 1 Input: 0 Column: (*))
+        |       |   |   |
+        |       |   |   (Name: Cast Type: float Uid: 5)
+        |       |   |   |
+        |       |   |   |---pagerank:(Name: Project Type: bytearray Uid: 5 Input: 1 Column: (*))
+        |       |   |
+        |       |   |---(Name: LOInnerLoad[0] Schema: page_id#1:bytearray)
+        |       |   |
+        |       |   |---(Name: LOInnerLoad[1] Schema: pagerank#5:bytearray)
+        |       |
+        |       |---pagerank_temp: (Name: LOLoad Schema: page_id#1:bytearray,pagerank#5:bytearray)ColumnPrune:RequiredColumns=[0, 2]ColumnPrune:InputUids=[1, 5]ColumnPrune:OutputUids=[1, 5]RequiredFields:[0, 2]
+        |
+        |---id_title: (Name: LODistinct Schema: page_id#6:int,title#7:chararray)ColumnPrune:InputUids=[6, 7]ColumnPrune:OutputUids=[6, 7]
+            |
+            |---id_title_temp: (Name: LOForEach Schema: page_id#6:int,title#7:chararray)ColumnPrune:InputUids=[6, 7]ColumnPrune:OutputUids=[6, 7]
+                |   |
+                |   (Name: LOGenerate[false,false] Schema: page_id#6:int,title#7:chararray)ColumnPrune:InputUids=[6, 7]ColumnPrune:OutputUids=[6, 7]
+                |   |   |
+                |   |   (Name: Cast Type: int Uid: 6)
+                |   |   |
+                |   |   |---page_id:(Name: Project Type: bytearray Uid: 6 Input: 0 Column: (*))
+                |   |   |
+                |   |   (Name: Cast Type: chararray Uid: 7)
+                |   |   |
+                |   |   |---title:(Name: Project Type: bytearray Uid: 7 Input: 1 Column: (*))
+                |   |
+                |   |---(Name: LOInnerLoad[0] Schema: page_id#6:bytearray)
+                |   |
+                |   |---(Name: LOInnerLoad[1] Schema: title#7:bytearray)
+                |
+                |---id_title_temp: (Name: LOLoad Schema: page_id#6:bytearray,title#7:bytearray)ColumnPrune:InputUids=[6, 7]ColumnPrune:OutputUids=[6, 7]RequiredFields:null
+

@@ -1,0 +1,324 @@
+#-----------------------------------------------
+# Physical Plan:
+#-----------------------------------------------
+digraph plan {
+compound=true;
+node [shape=rect];
+s487399205_in [label="", style=invis, height=0, width=0];
+s487399205_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399205 {
+label="indegree_temp: Local Rearrange[tuple]{int}(false)"labelloc=b;
+487399204 [label="Project[int][1]"];
+s487399205_in -> 487399204 [style=invis];
+};
+487399204 -> s487399205_out [style=invis];
+s487399266_in [label="", style=invis, height=0, width=0];
+s487399266_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399266 {
+label="pli: New For Each(false,false)[bag]"labelloc=b;
+487399270 [label="Project[int][0]"];
+s487399266_in -> 487399270 [style=invis];
+487399268 [label="Project[int][3]"];
+s487399266_in -> 487399268 [style=invis];
+};
+487399270 -> s487399266_out [style=invis];
+487399268 -> s487399266_out [style=invis];
+1923940087 [label="page: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/xml-wiki,\norg.apache.pig.builtin.PigStorage)", style="filled", fillcolor="gray"];
+487399206 [label="indegree_temp: Package[tuple]{int}"];
+487399207 [label="indegree_temp: Global Rearrange[tuple]"];
+s487399330_in [label="", style=invis, height=0, width=0];
+s487399330_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399330 {
+label="plt: New For Each(false,true)[bag]"labelloc=b;
+487399337 [label="Project[int][0]"];
+487399359 [label="Project[tuple][0]"];
+487399359 -> 487399337
+s487399330_in -> 487399359 [style=invis];
+487399332 [label="POUserFunc(org.apache.pig.builtin.TOKENIZE)[bag]"];
+487399334 [label="Project[chararray][2]"];
+487399333 [label="Constant(|)"];
+487399335 [label="Project[tuple][0]"];
+487399334 -> 487399332
+487399333 -> 487399332
+487399335 -> 487399334
+s487399330_in -> 487399333 [style=invis];
+s487399330_in -> 487399335 [style=invis];
+};
+487399337 -> s487399330_out [style=invis];
+487399332 -> s487399330_out [style=invis];
+s487399209_in [label="", style=invis, height=0, width=0];
+s487399209_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399209 {
+label="pli_distinct: Filter[bag]"labelloc=b;
+487399208 [label="Constant(true)"];
+s487399209_in -> 487399208 [style=invis];
+};
+487399208 -> s487399209_out [style=invis];
+s487399329_in [label="", style=invis, height=0, width=0];
+s487399329_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399329 {
+label="page_info: Filter[bag]"labelloc=b;
+487399328 [label="Constant(true)"];
+s487399329_in -> 487399328 [style=invis];
+};
+487399328 -> s487399329_out [style=invis];
+s487399210_in [label="", style=invis, height=0, width=0];
+s487399210_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399210 {
+label="outdegree: New For Each(false,false)[bag]"labelloc=b;
+487399236 [label="Project[int][0]"];
+s487399210_in -> 487399236 [style=invis];
+487399212 [label="Project[bag][1]"];
+487399213 [label="Project[bag][1]"];
+487399213 -> 487399212
+s487399210_in -> 487399213 [style=invis];
+};
+487399236 -> s487399210_out [style=invis];
+487399212 -> s487399210_out [style=invis];
+2070488828 [label="page_count: Store(file:/tmp/temp-6857700/tmp-952751233,\norg.apache.pig.impl.io.InterStorage)", style="filled", fillcolor="gray"];
+s2070488827_in [label="", style=invis, height=0, width=0];
+s2070488827_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488827 {
+label="page_count: New For Each(false)[bag]"labelloc=b;
+2070488824 [label="Project[bag][1]"];
+2070488825 [label="POUserFunc(org.apache.pig.builtin.COUNT)[long]"];
+2070488824 -> 2070488825
+s2070488827_in -> 2070488824 [style=invis];
+};
+2070488825 -> s2070488827_out [style=invis];
+s1923940092_in [label="", style=invis, height=0, width=0];
+s1923940092_out [label="", style=invis, height=0, width=0];
+subgraph cluster_1923940092 {
+label="parse: New For Each(false)[bag]"labelloc=b;
+1923940090 [label="POUserFunc(myudfs.ExtractPageInfo)[tuple]"];
+1923940088 [label="Project[bytearray][0]"];
+1923940089 [label="Cast[chararray]"];
+1923940088 -> 1923940089
+1923940089 -> 1923940090
+s1923940092_in -> 1923940088 [style=invis];
+};
+1923940090 -> s1923940092_out [style=invis];
+s1923940093_in [label="", style=invis, height=0, width=0];
+s1923940093_out [label="", style=invis, height=0, width=0];
+subgraph cluster_1923940093 {
+label="page_info: Filter[bag]"labelloc=b;
+487399368 [label="Not[boolean]"];
+487399367 [label="Project[tuple][0]"];
+487399366 [label="Project[int][3]"];
+487399365 [label="Constant(0)"];
+487399364 [label="Not Equal To[boolean]"];
+1923940094 [label="Project[tuple][0]"];
+487399363 [label="And[boolean]"];
+1923940095 [label="Project[chararray][1]"];
+1923940096 [label="POIsNull[boolean]"];
+487399368 -> 487399363
+487399367 -> 487399366
+487399366 -> 487399364
+487399365 -> 487399364
+487399364 -> 487399363
+1923940094 -> 1923940095
+1923940095 -> 1923940096
+1923940096 -> 487399368
+s1923940093_in -> 487399367 [style=invis];
+s1923940093_in -> 487399365 [style=invis];
+s1923940093_in -> 1923940094 [style=invis];
+};
+487399363 -> s1923940093_out [style=invis];
+s487399151_in [label="", style=invis, height=0, width=0];
+s487399151_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399151 {
+label="node_temp: Local Rearrange[tuple]{int}(false)"labelloc=b;
+487399150 [label="Project[int][0]"];
+s487399151_in -> 487399150 [style=invis];
+};
+487399150 -> s487399151_out [style=invis];
+s487399149_in [label="", style=invis, height=0, width=0];
+s487399149_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399149 {
+label="node_temp: Local Rearrange[tuple]{int}(false)"labelloc=b;
+487399148 [label="Project[int][0]"];
+s487399149_in -> 487399148 [style=invis];
+};
+487399148 -> s487399149_out [style=invis];
+s487399145_in [label="", style=invis, height=0, width=0];
+s487399145_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399145 {
+label="node_temp: New For Each(true,true)[tuple]"labelloc=b;
+487399147 [label="Project[bag][1]"];
+s487399145_in -> 487399147 [style=invis];
+487399146 [label="Project[bag][2]"];
+s487399145_in -> 487399146 [style=invis];
+};
+487399147 -> s487399145_out [style=invis];
+487399146 -> s487399145_out [style=invis];
+s487399144_in [label="", style=invis, height=0, width=0];
+s487399144_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399144 {
+label="page_info: Filter[bag]"labelloc=b;
+487399143 [label="Constant(true)"];
+s487399144_in -> 487399143 [style=invis];
+};
+487399143 -> s487399144_out [style=invis];
+487399239 [label="outdegree_temp: Package[tuple]{int}"];
+487399240 [label="outdegree_temp: Global Rearrange[tuple]"];
+s487399238_in [label="", style=invis, height=0, width=0];
+s487399238_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399238 {
+label="outdegree_temp: Local Rearrange[tuple]{int}(false)"labelloc=b;
+487399237 [label="Project[int][0]"];
+s487399238_in -> 487399237 [style=invis];
+};
+487399237 -> s487399238_out [style=invis];
+487399173 [label="node_temp: Package[tuple]{int}"];
+487399174 [label="node_temp: Global Rearrange[tuple]"];
+s487399300_in [label="", style=invis, height=0, width=0];
+s487399300_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399300 {
+label="title_id: New For Each(false,false)[bag]"labelloc=b;
+487399306 [label="Project[tuple][0]"];
+487399305 [label="Project[chararray][1]"];
+487399306 -> 487399305
+s487399300_in -> 487399306 [style=invis];
+487399303 [label="Project[tuple][0]"];
+487399302 [label="Project[int][0]"];
+487399303 -> 487399302
+s487399300_in -> 487399303 [style=invis];
+};
+487399305 -> s487399300_out [style=invis];
+487399302 -> s487399300_out [style=invis];
+s487399177_in [label="", style=invis, height=0, width=0];
+s487399177_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399177 {
+label="indegree: New For Each(false,false)[bag]"labelloc=b;
+487399182 [label="Project[int][0]"];
+s487399177_in -> 487399182 [style=invis];
+487399179 [label="Project[bag][0]"];
+487399180 [label="Project[bag][1]"];
+487399180 -> 487399179
+s487399177_in -> 487399180 [style=invis];
+};
+487399182 -> s487399177_out [style=invis];
+487399179 -> s487399177_out [style=invis];
+s487399297_in [label="", style=invis, height=0, width=0];
+s487399297_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399297 {
+label="pli_temp: FRJoin[tuple]"labelloc=b;
+487399299 [label="Project[chararray][1]"];
+s487399297_in -> 487399299 [style=invis];
+487399298 [label="Project[chararray][0]"];
+s487399297_in -> 487399298 [style=invis];
+};
+487399299 -> s487399297_out [style=invis];
+487399298 -> s487399297_out [style=invis];
+487399243 [label="pli_distinct: Split"];
+487399244 [label="pli_distinct: PODistinct[bag]"];
+487399362 [label="page_info: Split"];
+s487399242_in [label="", style=invis, height=0, width=0];
+s487399242_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399242 {
+label="pli_distinct: Filter[bag]"labelloc=b;
+487399241 [label="Constant(true)"];
+s487399242_in -> 487399241 [style=invis];
+};
+487399241 -> s487399242_out [style=invis];
+s487399361_in [label="", style=invis, height=0, width=0];
+s487399361_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399361 {
+label="page_info: Filter[bag]"labelloc=b;
+487399360 [label="Constant(true)"];
+s487399361_in -> 487399360 [style=invis];
+};
+487399360 -> s487399361_out [style=invis];
+487399114 [label="page_ids: Global Rearrange[tuple]"];
+2070488862 [label="graph: Store(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/graph,\norg.apache.pig.builtin.PigStorage)", style="filled", fillcolor="gray"];
+487399113 [label="page_ids: Package[tuple]{chararray}"];
+s2070488861_in [label="", style=invis, height=0, width=0];
+s2070488861_out [label="", style=invis, height=0, width=0];
+subgraph cluster_2070488861 {
+label="graph: New For Each(false,false,false)[bag]"labelloc=b;
+2070488829 [label="Project[int][0]"];
+s2070488861_in -> 2070488829 [style=invis];
+2070488831 [label="Project[bag][1]"];
+s2070488861_in -> 2070488831 [style=invis];
+2070488859 [label="Cast[float]"];
+2070488858 [label="POUserFunc(org.apache.pig.impl.builtin.ReadScalars)[long]"];
+2070488857 [label="Constant(file:/tmp/temp-6857700/tmp-952751233)"];
+2070488856 [label="Constant(0)"];
+2070488860 [label="Divide[float]"];
+2070488833 [label="Constant(1)"];
+2070488855 [label="Cast[float]"];
+2070488859 -> 2070488860
+2070488858 -> 2070488859
+2070488857 -> 2070488858
+2070488856 -> 2070488858
+2070488833 -> 2070488855
+2070488855 -> 2070488860
+s2070488861_in -> 2070488857 [style=invis];
+s2070488861_in -> 2070488856 [style=invis];
+s2070488861_in -> 2070488833 [style=invis];
+};
+2070488829 -> s2070488861_out [style=invis];
+2070488831 -> s2070488861_out [style=invis];
+2070488860 -> s2070488861_out [style=invis];
+s487399115_in [label="", style=invis, height=0, width=0];
+s487399115_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399115 {
+label="id_title: New For Each(false,false)[bag]"labelloc=b;
+487399120 [label="Project[int][0]"];
+487399142 [label="Project[tuple][0]"];
+487399142 -> 487399120
+s487399115_in -> 487399142 [style=invis];
+487399118 [label="Project[tuple][0]"];
+487399117 [label="Project[chararray][1]"];
+487399118 -> 487399117
+s487399115_in -> 487399118 [style=invis];
+};
+487399120 -> s487399115_out [style=invis];
+487399117 -> s487399115_out [style=invis];
+s487399112_in [label="", style=invis, height=0, width=0];
+s487399112_out [label="", style=invis, height=0, width=0];
+subgraph cluster_487399112 {
+label="page_ids: Local Rearrange[tuple]{chararray}(false)"labelloc=b;
+487399111 [label="Constant(all)"];
+s487399112_in -> 487399111 [style=invis];
+};
+487399111 -> s487399112_out [style=invis];
+s487399205_out -> 487399207
+s487399266_out -> 487399244
+1923940087 -> s1923940092_in [lhead=cluster_1923940092]
+487399206 -> s487399177_in [lhead=cluster_487399177]
+487399207 -> 487399206
+s487399330_out -> s487399297_in [lhead=cluster_487399297]
+s487399209_out -> s487399205_in [lhead=cluster_487399205]
+s487399329_out -> s487399300_in [lhead=cluster_487399300]
+s487399210_out -> s487399151_in [lhead=cluster_487399151]
+s2070488827_out -> 2070488828
+s1923940092_out -> s1923940093_in [lhead=cluster_1923940093]
+s1923940093_out -> 487399362
+s487399151_out -> 487399174
+s487399149_out -> 487399174
+s487399145_out -> s2070488861_in [lhead=cluster_2070488861]
+s487399144_out -> s487399115_in [lhead=cluster_487399115]
+487399239 -> s487399210_in [lhead=cluster_487399210]
+487399240 -> 487399239
+s487399238_out -> 487399240
+487399173 -> s487399145_in [lhead=cluster_487399145]
+487399174 -> 487399173
+s487399300_out -> s487399297_in [lhead=cluster_487399297]
+s487399177_out -> s487399149_in [lhead=cluster_487399149]
+s487399297_out -> s487399266_in [lhead=cluster_487399266]
+487399243 -> s487399242_in [lhead=cluster_487399242]
+487399243 -> s487399209_in [lhead=cluster_487399209]
+487399244 -> 487399243
+487399362 -> s487399361_in [lhead=cluster_487399361]
+487399362 -> s487399329_in [lhead=cluster_487399329]
+487399362 -> s487399144_in [lhead=cluster_487399144]
+s487399242_out -> s487399238_in [lhead=cluster_487399238]
+s487399361_out -> s487399330_in [lhead=cluster_487399330]
+487399114 -> 487399113
+487399113 -> s2070488827_in [lhead=cluster_2070488827]
+s2070488861_out -> 2070488862
+s487399115_out -> s487399112_in [lhead=cluster_487399112]
+s487399112_out -> 487399114
+}
+

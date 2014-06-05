@@ -1,0 +1,369 @@
+#-----------------------------------------------
+# Physical Plan:
+#-----------------------------------------------
+page_count: Store(file:/tmp/temp1886610053/tmp1937929899:org.apache.pig.impl.io.InterStorage) - scope-104
+|
+|---page_count: New For Each(false)[bag] - scope-103
+    |   |
+    |   POUserFunc(org.apache.pig.builtin.COUNT)[long] - scope-101
+    |   |
+    |   |---Project[bag][1] - scope-100
+    |
+    |---page_ids: Package[tuple]{chararray} - scope-97
+        |
+        |---page_ids: Global Rearrange[tuple] - scope-96
+            |
+            |---page_ids: Local Rearrange[tuple]{chararray}(false) - scope-98
+                |   |
+                |   Constant(all) - scope-99
+                |
+                |---id_title: New For Each(false,false)[bag] - scope-95
+                    |   |
+                    |   Project[int][0] - scope-90
+                    |   |
+                    |   |---Project[tuple][0] - scope-89
+                    |   |
+                    |   Project[chararray][1] - scope-93
+                    |   |
+                    |   |---Project[tuple][0] - scope-92
+                    |
+                    |---page_info: Filter[bag] - scope-87
+                        |   |
+                        |   Constant(true) - scope-88
+                        |
+                        |---page_info: Split - scope-16
+                            |
+                            |---page_info: Filter[bag] - scope-6
+                                |   |
+                                |   And[boolean] - scope-15
+                                |   |
+                                |   |---Not[boolean] - scope-10
+                                |   |   |
+                                |   |   |---POIsNull[boolean] - scope-9
+                                |   |       |
+                                |   |       |---Project[chararray][1] - scope-8
+                                |   |           |
+                                |   |           |---Project[tuple][0] - scope-7
+                                |   |
+                                |   |---Not Equal To[boolean] - scope-14
+                                |       |
+                                |       |---Project[int][3] - scope-12
+                                |       |   |
+                                |       |   |---Project[tuple][0] - scope-11
+                                |       |
+                                |       |---Constant(0) - scope-13
+                                |
+                                |---parse: New For Each(false)[bag] - scope-5
+                                    |   |
+                                    |   POUserFunc(myudfs.ExtractPageInfo)[tuple] - scope-3
+                                    |   |
+                                    |   |---Cast[chararray] - scope-2
+                                    |       |
+                                    |       |---Project[bytearray][0] - scope-1
+                                    |
+                                    |---page: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/xml-wiki:org.apache.pig.builtin.PigStorage) - scope-0
+
+graph: Store(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/graph:org.apache.pig.builtin.PigStorage) - scope-117
+|
+|---graph: New For Each(false,false,false)[bag] - scope-116
+    |   |
+    |   Project[int][0] - scope-105
+    |   |
+    |   Project[bag][1] - scope-107
+    |   |
+    |   Divide[float] - scope-115
+    |   |
+    |   |---Cast[float] - scope-110
+    |   |   |
+    |   |   |---Constant(1) - scope-109
+    |   |
+    |   |---Cast[float] - scope-114
+    |       |
+    |       |---POUserFunc(org.apache.pig.impl.builtin.ReadScalars)[long] - scope-113
+    |           |
+    |           |---Constant(0) - scope-111
+    |           |
+    |           |---Constant(file:/tmp/temp1886610053/tmp1937929899) - scope-112
+    |
+    |---node_temp: New For Each(true,true)[tuple] - scope-86
+        |   |
+        |   Project[bag][1] - scope-84
+        |   |
+        |   Project[bag][2] - scope-85
+        |
+        |---node_temp: Package[tuple]{int} - scope-79
+            |
+            |---node_temp: Global Rearrange[tuple] - scope-78
+                |
+                |---node_temp: Local Rearrange[tuple]{int}(false) - scope-80
+                |   |   |
+                |   |   Project[int][0] - scope-81
+                |   |
+                |   |---outdegree: New For Each(false,false)[bag] - scope-63
+                |       |   |
+                |       |   Project[int][0] - scope-58
+                |       |   |
+                |       |   Project[bag][1] - scope-61
+                |       |   |
+                |       |   |---Project[bag][1] - scope-60
+                |       |
+                |       |---outdegree_temp: Package[tuple]{int} - scope-55
+                |           |
+                |           |---outdegree_temp: Global Rearrange[tuple] - scope-54
+                |               |
+                |               |---outdegree_temp: Local Rearrange[tuple]{int}(false) - scope-56
+                |                   |   |
+                |                   |   Project[int][0] - scope-57
+                |                   |
+                |                   |---pli_distinct: Filter[bag] - scope-52
+                |                       |   |
+                |                       |   Constant(true) - scope-53
+                |                       |
+                |                       |---pli_distinct: Split - scope-51
+                |                           |
+                |                           |---pli_distinct: PODistinct[bag] - scope-50
+                |                               |
+                |                               |---pli: New For Each(false,false)[bag] - scope-49
+                |                                   |   |
+                |                                   |   Project[int][0] - scope-45
+                |                                   |   |
+                |                                   |   Project[int][3] - scope-47
+                |                                   |
+                |                                   |---pli_temp: FRJoin[tuple] - scope-39
+                |                                       |   |
+                |                                       |   Project[chararray][1] - scope-37
+                |                                       |   |
+                |                                       |   Project[chararray][0] - scope-38
+                |                                       |
+                |                                       |---plt: New For Each(false,true)[bag] - scope-27
+                |                                       |   |   |
+                |                                       |   |   Project[int][0] - scope-20
+                |                                       |   |   |
+                |                                       |   |   |---Project[tuple][0] - scope-19
+                |                                       |   |   |
+                |                                       |   |   POUserFunc(org.apache.pig.builtin.TOKENIZE)[bag] - scope-25
+                |                                       |   |   |
+                |                                       |   |   |---Project[chararray][2] - scope-23
+                |                                       |   |   |   |
+                |                                       |   |   |   |---Project[tuple][0] - scope-22
+                |                                       |   |   |
+                |                                       |   |   |---Constant(|) - scope-24
+                |                                       |   |
+                |                                       |   |---page_info: Filter[bag] - scope-17
+                |                                       |       |   |
+                |                                       |       |   Constant(true) - scope-18
+                |                                       |       |
+                |                                       |       |---page_info: Split - scope-16
+                |                                       |           |
+                |                                       |           |---page_info: Filter[bag] - scope-6
+                |                                       |               |   |
+                |                                       |               |   And[boolean] - scope-15
+                |                                       |               |   |
+                |                                       |               |   |---Not[boolean] - scope-10
+                |                                       |               |   |   |
+                |                                       |               |   |   |---POIsNull[boolean] - scope-9
+                |                                       |               |   |       |
+                |                                       |               |   |       |---Project[chararray][1] - scope-8
+                |                                       |               |   |           |
+                |                                       |               |   |           |---Project[tuple][0] - scope-7
+                |                                       |               |   |
+                |                                       |               |   |---Not Equal To[boolean] - scope-14
+                |                                       |               |       |
+                |                                       |               |       |---Project[int][3] - scope-12
+                |                                       |               |       |   |
+                |                                       |               |       |   |---Project[tuple][0] - scope-11
+                |                                       |               |       |
+                |                                       |               |       |---Constant(0) - scope-13
+                |                                       |               |
+                |                                       |               |---parse: New For Each(false)[bag] - scope-5
+                |                                       |                   |   |
+                |                                       |                   |   POUserFunc(myudfs.ExtractPageInfo)[tuple] - scope-3
+                |                                       |                   |   |
+                |                                       |                   |   |---Cast[chararray] - scope-2
+                |                                       |                   |       |
+                |                                       |                   |       |---Project[bytearray][0] - scope-1
+                |                                       |                   |
+                |                                       |                   |---page: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/xml-wiki:org.apache.pig.builtin.PigStorage) - scope-0
+                |                                       |
+                |                                       |---title_id: New For Each(false,false)[bag] - scope-36
+                |                                           |   |
+                |                                           |   Project[chararray][1] - scope-31
+                |                                           |   |
+                |                                           |   |---Project[tuple][0] - scope-30
+                |                                           |   |
+                |                                           |   Project[int][0] - scope-34
+                |                                           |   |
+                |                                           |   |---Project[tuple][0] - scope-33
+                |                                           |
+                |                                           |---page_info: Filter[bag] - scope-28
+                |                                               |   |
+                |                                               |   Constant(true) - scope-29
+                |                                               |
+                |                                               |---page_info: Split - scope-16
+                |                                                   |
+                |                                                   |---page_info: Filter[bag] - scope-6
+                |                                                       |   |
+                |                                                       |   And[boolean] - scope-15
+                |                                                       |   |
+                |                                                       |   |---Not[boolean] - scope-10
+                |                                                       |   |   |
+                |                                                       |   |   |---POIsNull[boolean] - scope-9
+                |                                                       |   |       |
+                |                                                       |   |       |---Project[chararray][1] - scope-8
+                |                                                       |   |           |
+                |                                                       |   |           |---Project[tuple][0] - scope-7
+                |                                                       |   |
+                |                                                       |   |---Not Equal To[boolean] - scope-14
+                |                                                       |       |
+                |                                                       |       |---Project[int][3] - scope-12
+                |                                                       |       |   |
+                |                                                       |       |   |---Project[tuple][0] - scope-11
+                |                                                       |       |
+                |                                                       |       |---Constant(0) - scope-13
+                |                                                       |
+                |                                                       |---parse: New For Each(false)[bag] - scope-5
+                |                                                           |   |
+                |                                                           |   POUserFunc(myudfs.ExtractPageInfo)[tuple] - scope-3
+                |                                                           |   |
+                |                                                           |   |---Cast[chararray] - scope-2
+                |                                                           |       |
+                |                                                           |       |---Project[bytearray][0] - scope-1
+                |                                                           |
+                |                                                           |---page: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/xml-wiki:org.apache.pig.builtin.PigStorage) - scope-0
+                |
+                |---node_temp: Local Rearrange[tuple]{int}(false) - scope-82
+                    |   |
+                    |   Project[int][0] - scope-83
+                    |
+                    |---indegree: New For Each(false,false)[bag] - scope-75
+                        |   |
+                        |   Project[int][0] - scope-70
+                        |   |
+                        |   Project[bag][0] - scope-73
+                        |   |
+                        |   |---Project[bag][1] - scope-72
+                        |
+                        |---indegree_temp: Package[tuple]{int} - scope-67
+                            |
+                            |---indegree_temp: Global Rearrange[tuple] - scope-66
+                                |
+                                |---indegree_temp: Local Rearrange[tuple]{int}(false) - scope-68
+                                    |   |
+                                    |   Project[int][1] - scope-69
+                                    |
+                                    |---pli_distinct: Filter[bag] - scope-64
+                                        |   |
+                                        |   Constant(true) - scope-65
+                                        |
+                                        |---pli_distinct: Split - scope-51
+                                            |
+                                            |---pli_distinct: PODistinct[bag] - scope-50
+                                                |
+                                                |---pli: New For Each(false,false)[bag] - scope-49
+                                                    |   |
+                                                    |   Project[int][0] - scope-45
+                                                    |   |
+                                                    |   Project[int][3] - scope-47
+                                                    |
+                                                    |---pli_temp: FRJoin[tuple] - scope-39
+                                                        |   |
+                                                        |   Project[chararray][1] - scope-37
+                                                        |   |
+                                                        |   Project[chararray][0] - scope-38
+                                                        |
+                                                        |---plt: New For Each(false,true)[bag] - scope-27
+                                                        |   |   |
+                                                        |   |   Project[int][0] - scope-20
+                                                        |   |   |
+                                                        |   |   |---Project[tuple][0] - scope-19
+                                                        |   |   |
+                                                        |   |   POUserFunc(org.apache.pig.builtin.TOKENIZE)[bag] - scope-25
+                                                        |   |   |
+                                                        |   |   |---Project[chararray][2] - scope-23
+                                                        |   |   |   |
+                                                        |   |   |   |---Project[tuple][0] - scope-22
+                                                        |   |   |
+                                                        |   |   |---Constant(|) - scope-24
+                                                        |   |
+                                                        |   |---page_info: Filter[bag] - scope-17
+                                                        |       |   |
+                                                        |       |   Constant(true) - scope-18
+                                                        |       |
+                                                        |       |---page_info: Split - scope-16
+                                                        |           |
+                                                        |           |---page_info: Filter[bag] - scope-6
+                                                        |               |   |
+                                                        |               |   And[boolean] - scope-15
+                                                        |               |   |
+                                                        |               |   |---Not[boolean] - scope-10
+                                                        |               |   |   |
+                                                        |               |   |   |---POIsNull[boolean] - scope-9
+                                                        |               |   |       |
+                                                        |               |   |       |---Project[chararray][1] - scope-8
+                                                        |               |   |           |
+                                                        |               |   |           |---Project[tuple][0] - scope-7
+                                                        |               |   |
+                                                        |               |   |---Not Equal To[boolean] - scope-14
+                                                        |               |       |
+                                                        |               |       |---Project[int][3] - scope-12
+                                                        |               |       |   |
+                                                        |               |       |   |---Project[tuple][0] - scope-11
+                                                        |               |       |
+                                                        |               |       |---Constant(0) - scope-13
+                                                        |               |
+                                                        |               |---parse: New For Each(false)[bag] - scope-5
+                                                        |                   |   |
+                                                        |                   |   POUserFunc(myudfs.ExtractPageInfo)[tuple] - scope-3
+                                                        |                   |   |
+                                                        |                   |   |---Cast[chararray] - scope-2
+                                                        |                   |       |
+                                                        |                   |       |---Project[bytearray][0] - scope-1
+                                                        |                   |
+                                                        |                   |---page: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/xml-wiki:org.apache.pig.builtin.PigStorage) - scope-0
+                                                        |
+                                                        |---title_id: New For Each(false,false)[bag] - scope-36
+                                                            |   |
+                                                            |   Project[chararray][1] - scope-31
+                                                            |   |
+                                                            |   |---Project[tuple][0] - scope-30
+                                                            |   |
+                                                            |   Project[int][0] - scope-34
+                                                            |   |
+                                                            |   |---Project[tuple][0] - scope-33
+                                                            |
+                                                            |---page_info: Filter[bag] - scope-28
+                                                                |   |
+                                                                |   Constant(true) - scope-29
+                                                                |
+                                                                |---page_info: Split - scope-16
+                                                                    |
+                                                                    |---page_info: Filter[bag] - scope-6
+                                                                        |   |
+                                                                        |   And[boolean] - scope-15
+                                                                        |   |
+                                                                        |   |---Not[boolean] - scope-10
+                                                                        |   |   |
+                                                                        |   |   |---POIsNull[boolean] - scope-9
+                                                                        |   |       |
+                                                                        |   |       |---Project[chararray][1] - scope-8
+                                                                        |   |           |
+                                                                        |   |           |---Project[tuple][0] - scope-7
+                                                                        |   |
+                                                                        |   |---Not Equal To[boolean] - scope-14
+                                                                        |       |
+                                                                        |       |---Project[int][3] - scope-12
+                                                                        |       |   |
+                                                                        |       |   |---Project[tuple][0] - scope-11
+                                                                        |       |
+                                                                        |       |---Constant(0) - scope-13
+                                                                        |
+                                                                        |---parse: New For Each(false)[bag] - scope-5
+                                                                            |   |
+                                                                            |   POUserFunc(myudfs.ExtractPageInfo)[tuple] - scope-3
+                                                                            |   |
+                                                                            |   |---Cast[chararray] - scope-2
+                                                                            |       |
+                                                                            |       |---Project[bytearray][0] - scope-1
+                                                                            |
+                                                                            |---page: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/xml-wiki:org.apache.pig.builtin.PigStorage) - scope-0
+

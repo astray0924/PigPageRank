@@ -1,0 +1,145 @@
+#--------------------------------------------------
+# Map Reduce Plan                                  
+#--------------------------------------------------
+MapReduce node scope-62
+Map Plan
+Local Rearrange[tuple]{tuple}(true) - scope-64
+|   |
+|   Project[tuple][*] - scope-63
+|
+|---id_title_temp: New For Each(false,false)[bag] - scope-17
+    |   |
+    |   Cast[int] - scope-12
+    |   |
+    |   |---Project[bytearray][0] - scope-11
+    |   |
+    |   Cast[chararray] - scope-15
+    |   |
+    |   |---Project[bytearray][1] - scope-14
+    |
+    |---id_title_temp: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/id_title:org.apache.pig.builtin.PigStorage) - scope-10--------
+Reduce Plan
+Store(file:/tmp/temp-968503296/tmp-1966573636:org.apache.pig.impl.io.InterStorage) - scope-68
+|
+|---New For Each(true)[bag] - scope-67
+    |   |
+    |   Project[tuple][0] - scope-66
+    |
+    |---Package[tuple]{tuple} - scope-65--------
+Global sort: false
+----------------
+
+MapReduce node scope-51
+Map Plan
+sorted: Local Rearrange[tuple]{float}(false) - scope-52
+|   |
+|   Project[float][1] - scope-8
+|
+|---Load(file:/tmp/temp-968503296/tmp-1834067220:org.apache.pig.impl.io.InterStorage) - scope-50--------
+Combine Plan
+Local Rearrange[tuple]{float}(false) - scope-57
+|   |
+|   Project[float][1] - scope-8
+|
+|---Limit - scope-56
+    |
+    |---New For Each(true)[tuple] - scope-55
+        |   |
+        |   Project[bag][1] - scope-54
+        |
+        |---PackageLite[tuple]{float} - scope-53--------
+Reduce Plan
+top_title: Store(file:/tmp/temp-968503296/tmp-1487847386:org.apache.pig.impl.io.InterStorage) - scope-32
+|
+|---Limit - scope-61
+    |
+    |---New For Each(true)[tuple] - scope-60
+        |   |
+        |   Project[bag][1] - scope-59
+        |
+        |---PackageLite[tuple]{float} - scope-58--------
+Global sort: true
+Quantile file: file:/tmp/temp-968503296/tmp1777999822
+----------------
+
+MapReduce node scope-69
+Map Plan
+sorted: Local Rearrange[tuple]{float}(false) - scope-72
+|   |
+|   Project[float][1] - scope-71
+|
+|---Load(file:/tmp/temp-968503296/tmp-1487847386:org.apache.pig.impl.io.InterStorage) - scope-70--------
+Reduce Plan
+Store(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/result:org.apache.pig.builtin.PigStorage) - scope-78
+|
+|---top_title: New For Each(false,false)[bag] - scope-31
+    |   |
+    |   Project[chararray][3] - scope-27
+    |   |
+    |   Project[float][1] - scope-29
+    |
+    |---top_title_temp: FRJoin[tuple] - scope-21
+        |   |
+        |   Project[int][0] - scope-19
+        |   |
+        |   Project[int][0] - scope-20
+        |
+        |---Limit - scope-77
+            |
+            |---New For Each(true)[bag] - scope-76
+                |   |
+                |   Project[tuple][1] - scope-75
+                |
+                |---PackageLite[tuple]{float} - scope-74--------
+Global sort: false
+----------------
+
+MapReduce node scope-33
+Map Plan
+Store(file:/tmp/temp-968503296/tmp-1834067220:org.apache.pig.impl.io.InterStorage) - scope-34
+|
+|---pagerank: New For Each(false,false)[bag] - scope-7
+    |   |
+    |   Cast[int] - scope-2
+    |   |
+    |   |---Project[bytearray][0] - scope-1
+    |   |
+    |   Cast[float] - scope-5
+    |   |
+    |   |---Project[bytearray][1] - scope-4
+    |
+    |---pagerank_temp: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/pagerank_single:org.apache.pig.builtin.PigStorage) - scope-0--------
+Global sort: false
+----------------
+
+MapReduce node scope-36
+Map Plan
+sorted: Local Rearrange[tuple]{tuple}(false) - scope-40
+|   |
+|   Constant(all) - scope-39
+|
+|---New For Each(false)[tuple] - scope-38
+    |   |
+    |   Project[float][1] - scope-37
+    |
+    |---Load(file:/tmp/temp-968503296/tmp-1834067220:org.apache.pig.impl.builtin.RandomSampleLoader('org.apache.pig.impl.io.InterStorage','100')) - scope-35--------
+Reduce Plan
+Store(file:/tmp/temp-968503296/tmp1777999822:org.apache.pig.impl.io.InterStorage) - scope-49
+|
+|---New For Each(false)[tuple] - scope-48
+    |   |
+    |   POUserFunc(org.apache.pig.impl.builtin.FindQuantiles)[tuple] - scope-47
+    |   |
+    |   |---Project[tuple][*] - scope-46
+    |
+    |---New For Each(false,false)[tuple] - scope-45
+        |   |
+        |   Constant(-1) - scope-44
+        |   |
+        |   Project[bag][1] - scope-42
+        |
+        |---Package[tuple]{chararray} - scope-41--------
+Global sort: false
+Secondary sort: true
+----------------
+

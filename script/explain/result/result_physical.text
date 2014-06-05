@@ -1,0 +1,47 @@
+#-----------------------------------------------
+# Physical Plan:
+#-----------------------------------------------
+top_title: Store(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/result:org.apache.pig.builtin.PigStorage) - scope-32
+|
+|---top_title: New For Each(false,false)[bag] - scope-31
+    |   |
+    |   Project[chararray][3] - scope-27
+    |   |
+    |   Project[float][1] - scope-29
+    |
+    |---top_title_temp: FRJoin[tuple] - scope-21
+        |   |
+        |   Project[int][0] - scope-19
+        |   |
+        |   Project[int][0] - scope-20
+        |
+        |---sorted: POSort[bag]() - scope-9
+        |   |   |
+        |   |   Project[float][1] - scope-8
+        |   |
+        |   |---pagerank: New For Each(false,false)[bag] - scope-7
+        |       |   |
+        |       |   Cast[int] - scope-2
+        |       |   |
+        |       |   |---Project[bytearray][0] - scope-1
+        |       |   |
+        |       |   Cast[float] - scope-5
+        |       |   |
+        |       |   |---Project[bytearray][1] - scope-4
+        |       |
+        |       |---pagerank_temp: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/pagerank_single:org.apache.pig.builtin.PigStorage) - scope-0
+        |
+        |---id_title: PODistinct[bag] - scope-18
+            |
+            |---id_title_temp: New For Each(false,false)[bag] - scope-17
+                |   |
+                |   Cast[int] - scope-12
+                |   |
+                |   |---Project[bytearray][0] - scope-11
+                |   |
+                |   Cast[chararray] - scope-15
+                |   |
+                |   |---Project[bytearray][1] - scope-14
+                |
+                |---id_title_temp: Load(file:///Users/kyoungrok/Documents/workspace/PigPageRank/script/output/id_title:org.apache.pig.builtin.PigStorage) - scope-10
+
