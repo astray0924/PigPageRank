@@ -36,32 +36,32 @@ P2 = Pig.compile("""
 
   sorted = order pagerank by pagerank desc;
 
-  top_100 = limit sorted 100;
+  top = limit sorted 300;
   id_title_temp = load 'output/id_title' as (page_id:int, title:chararray);
   id_title = distinct id_title_temp;
-  top_100_title_temp = join top_100 by page_id, id_title by page_id using 'replicated';
-  top_100_title = foreach top_100_title_temp generate id_title::title as title, top_100::pagerank as pagerank;
+  top_title_temp = join top by page_id, id_title by page_id using 'replicated';
+  top_title = foreach top_title_temp generate id_title::title as title, top::pagerank as pagerank;
 
-  --store top_100_title into '$docs_out';
+  store top_title into '$docs_out';
 
-  explain -out explain/result.dot -dot top_100_title;
+  --explain -out explain/result.dot -dot top_title;
 """)
 
 # Calculate PageRank
 params = { 'd': '0.85', 'docs_in': 'output/graph' }
-K = 1
-for i in range(K):
-    out = "output/pagerank_" + str(i + 1)
-    params["docs_out"] = out
-    params["iteration"] = str(i + 1)
-    # Pig.fs("rmr " + out)
-    bound = P1.bind(params)
-    stats = bound.runSingle()
+K = 20
+# for i in range(K):
+#     out = "output/pagerank_" + str(i + 1)
+#     params["docs_out"] = out
+#     params["iteration"] = str(i + 1)
+#     # Pig.fs("rmr " + out)
+#     bound = P1.bind(params)
+#     stats = bound.runSingle()
 
-    if not stats.isSuccessful():
-        raise 'failed'
+#     if not stats.isSuccessful():
+#         raise 'failed'
     
-    params["docs_in"] = out
+#     params["docs_in"] = out
 
 # Sort and Save Result
 params = {'docs_in': 'output/pagerank_' + str(K), 'docs_out': 'output/result'}
